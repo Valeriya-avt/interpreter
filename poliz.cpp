@@ -17,6 +17,8 @@ public:
 	int getLexType() {return type;}
 	virtual int getType() { };
 	virtual int getValue(int a = 1, int b = 1) { };
+	virtual int getPriority() { }
+	virtual void print() { }
 };
 
 class Number: public Lexem {
@@ -24,6 +26,7 @@ class Number: public Lexem {
 public:
 	Number(int number);
 	int getValue(int, int);
+	void print() {cout << value;}
 };
 
 Number::Number(int number) {
@@ -55,6 +58,7 @@ public:
 	int getType();
 	int getPriority();
 	int getValue(int left, int right);
+	void print();
 };
 
 Oper::Oper(int charCode = 0) {
@@ -73,7 +77,7 @@ int Oper::getType() {
 }
 
 int Oper::getPriority() {
-	return PRIORITY[opertype - 1];
+	return PRIORITY[opertype];
 }
 
 int Oper::getValue(int left = 1, int right = 1) {
@@ -84,15 +88,23 @@ int Oper::getValue(int left = 1, int right = 1) {
 	}
 }
 
-int getValue(int type, int left, int right) {
-//	cout << "getValue\n";
-//	cout << type << PLUS << endl;
-	switch (type) {
-		case PLUS: cout << "PLUS\n"; return left + right;
-		case MINUS: cout << "MINUS\n"; return left - right;
-		case MULTIPLY: cout << "MULTIPLY\n"; return left * right;
+void Oper::print() {
+	switch (this->getType()) {
+		case LBRACKET: cout << " ( "; break;
+		case RBRACKET: cout << " ) "; break;
+		case PLUS: cout << " + "; break;
+		case MINUS: cout << " - "; break;
+		case MULTIPLY: cout << " * "; break;
 	}
 }
+
+// int getValue(int type, int left, int right) {
+// 	switch (type) {
+// 		case PLUS: cout << "PLUS\n"; return left + right;
+// 		case MINUS: cout << "MINUS\n"; return left - right;
+// 		case MULTIPLY: cout << "MULTIPLY\n"; return left * right;
+// 	}
+// }
 
 vector<Lexem *> parseLexem(string codeline) {
 	vector<Lexem *> infix;
@@ -119,19 +131,44 @@ vector<Lexem *> parseLexem(string codeline) {
 }
 
 vector<Lexem *> buildPostfix(vector<Lexem *> infix) {
+	int i, j;
 	stack<Oper *> opstack;
 	vector<Lexem *> postfix;
-	for (int i = 0; i < infix.size(); i++) {
+	for (i = 0; i < infix.size(); i++) {
 		if (infix[i]->getLexType() == NUMBER) {
 			postfix.push_back(infix[i]);
+			cout << "cout 1\n";
 	//		cout << "IS_NUMBER\n";
 		}
 		if (infix[i]->getLexType() == OPER) {
-			opstack.push((Oper *)infix[i]);
+			if (infix[i]->getType() == LBRACKET) {
+				cout << "cout 2\n";
+				opstack.push((Oper *)infix[i]);
+			} else {
+				if (infix[i]->getType() == RBRACKET) {
+					cout << "cout 31\n";
+					for (j = opstack.size(); j > 0 && opstack.top()->getType() != LBRACKET; j--) {
+						cout << "cout 32\n";
+						postfix.push_back(opstack.top());
+						opstack.pop();
+					}
+					opstack.pop();
+				} else {
+					cout << "cout 41\n";
+					while ((opstack.empty() == false) && opstack.top()->getPriority() > infix[i]->getPriority()) {
+						cout << "cout 42\n";
+						postfix.push_back(opstack.top());
+						opstack.pop();
+					}
+					cout << "cout 43\n";
+					opstack.push((Oper *)infix[i]);
+				}
+			}
+		//	opstack.push((Oper *)infix[i]);
 	//		cout << "IS_OPER\n";
 		}
 	}
-	for (int i = opstack.size() - 1; i >= 0; i--) {
+	for (i = opstack.size(); i > 0; i--) {
 		postfix.push_back(opstack.top());
 		opstack.pop();
 	}
@@ -159,7 +196,11 @@ int main() {
 	while (std::getline(std::cin, codeline)) {
 		infix = parseLexem(codeline);
 		postfix = buildPostfix(infix);
+		for (int i = 0; i < postfix.size(); ++i) {
+			postfix[i]->print();
+		}
+		cout << '\n';
 		value = evaluatePostfix(postfix);
-		cout << value << endl;
+		cout << "Answer: " << value << endl;
 	}
 }
