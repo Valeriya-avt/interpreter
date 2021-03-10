@@ -23,7 +23,6 @@ public:
 	virtual int getPriority() { }
 	virtual void print() { }
 	virtual string getName() { }
-	virtual void setValue() { }
 };
 
 class Number: public Lexem {
@@ -98,19 +97,15 @@ void Oper::print() {
 }
 
 class Variable: public Lexem {
-	int value;
 	string name;
 public:
 	Variable(string str, int value = 0);
 	void print();
 	string getName() {return name;}
-	int getValue() {return value;}
-	void setValue(int value) {Variable::value = value;}
 };
 
 Variable::Variable(string str, int value) {
 	name = str;
-	Variable::value = value;
 	this->setType(VARIABLE);
 }
 
@@ -118,7 +113,7 @@ void Variable::print() {
 	cout << name << " ";
 }
 
-std::map<std::string, Variable*> m;
+std::map<std::string, int> m;
 
 bool checkOperator(char ch) {
 	return (ch == '+' || ch == '-' ||
@@ -138,6 +133,8 @@ vector<Lexem *> parseLexem(string codeline) {
 	for (i = 0; i < codeline.size(); ++i) {
 		string tmp;
 		number = 0;
+		if (codeline[i] == ' ' || codeline[i] == '\n' || codeline[i] == '\t')
+			continue;
 		for (j = i; codeline[j] >= '0' && codeline[j] <= '9'; ++j) {
 			number = number * 10 + codeline[j] - '0';
 		}
@@ -198,8 +195,8 @@ vector<Lexem *> buildPostfix(vector<Lexem *> infix) {
 		}
 		if (infix[i]->getLexType() == VARIABLE) {
 			postfix.push_back(infix[i]);
-			if (m.count(infix[i]->getName()) == 0)
-				m[infix[i]->getName()] = (Variable *)infix[i];
+		//	if (m.count(infix[i]->getName()) == 0)
+		//		m[infix[i]->getName()] = infix[i]->getValue();
 		}
 	}
 	for (i = opstack.size(); i > 0; i--) {
@@ -233,18 +230,17 @@ int evaluatePostfix(vector<Lexem *> poliz) {
 			left = checkForEvaluate(poliz, computationStack);
 			if (poliz[i]->getType() == ASSIGN) {
 				if (right->getLexType() == VARIABLE) {
-					right = new Number(m[right->getName()]->getValue());
+					right = new Number(m[right->getName()]);
 				}
-				m[left->getName()]->setValue(right->getValue());
-			//	m[left->getName()]->setValue(right->getValue());
+				m[left->getName()] = right->getValue();
 				Number *num = new Number(right->getValue());
 				computationStack.push(num);
 			} else {
 				if (right->getLexType() == VARIABLE) {
-					right = new Number(m[right->getName()]->getValue());
+					right = new Number(m[right->getName()]);
 				}
 				if (left->getLexType() == VARIABLE) {
-					left = new Number(m[left->getName()]->getValue());
+					left = new Number(m[left->getName()]);
 				}
 				value = poliz[i]->getValue(left->getValue(), right->getValue());
 				Number *num = new Number(value);
@@ -273,7 +269,7 @@ int main() {
 		cout << "Result: " << value << '\n';
 		cout << "Variable map:\n";
 		for (auto it = m.begin(); it != m.end(); ++it)
-			cout << (*it).first << " = " << (*it).second->getValue() << endl;
+			cout << (*it).first << " = " << (*it).second << endl;
 		cout << endl;
 	}
 	return 0;
