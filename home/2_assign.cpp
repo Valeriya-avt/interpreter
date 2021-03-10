@@ -122,14 +122,14 @@ std::map<std::string, Variable*> m;
 
 bool checkOperator(char ch) {
 	return (ch == '+' || ch == '-' ||
-		    ch == '*' || ch == '=' ||
-		    ch == '(' || ch == ')');
+			ch == '*' || ch == '=' ||
+			ch == '(' || ch == ')');
 }
 
 bool checkVariable(char ch) {
 	return ((ch >= 'a' && ch <= 'z') ||
-		    (ch >= 'A' && ch <= 'Z') ||
-		     ch == '_' || ch == '-');
+			(ch >= 'A' && ch <= 'Z') ||
+			 ch == '_');
 }
 
 vector<Lexem *> parseLexem(string codeline) {
@@ -213,11 +213,10 @@ Lexem *checkForEvaluate(vector<Lexem *> poliz, stack<Lexem *> &computationStack)
 	Lexem *tmp;
 	if (computationStack.top()->getLexType() == NUMBER) {
 		tmp = new Number(computationStack.top()->getValue());
-		computationStack.pop();
 	} else {
 		tmp = new Variable(computationStack.top()->getName());
-		computationStack.pop();
 	}
+	computationStack.pop();
 	return tmp;
 }
 
