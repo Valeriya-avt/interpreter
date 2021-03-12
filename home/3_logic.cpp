@@ -173,7 +173,7 @@ Oper *getOper(string codeline, int pos, int &next) {
 	for (int op = 0; op < n; op++) {
 		string subcodeline = codeline.substr(pos, OPERTEXT[op].size());
 		if (OPERTEXT[op] == subcodeline) {
-			next += OPERTEXT[op].size();
+			next = pos + OPERTEXT[op].size();
 			return new Oper(op);
 		}
 	}
@@ -210,23 +210,31 @@ Variable *getVariable(string codeline, int pos, int &next) {
 	}
 }
 
+bool checkSeparators(char ch) {
+	return ch == ' ' || ch == '\t' || ch == '\n';
+}
+
 vector<Lexem *> parseLexem(string codeline) {
 	vector<Lexem *> infix;
 	Lexem *lexem;
 	int pos, next = 0;
 	for (pos = 0; pos < codeline.size();) {
+		if (checkSeparators(codeline[pos])) {
+			pos++;
+			continue;
+		} 
 		lexem = getOper(codeline, pos, next);
 		if (lexem != nullptr) {
 			infix.push_back(lexem);
+			pos = next;
+			continue;
 		}
 		lexem = getNumber(codeline, pos, next);
-		if (lexem != nullptr) {
+		if (lexem != nullptr)
 			infix.push_back(lexem);
-		}
 		lexem = getVariable(codeline, pos, next);
-		if (lexem != nullptr) {
+		if (lexem != nullptr)
 			infix.push_back(lexem);
-		}
 		pos = next;
 	}
 	return infix;
@@ -332,10 +340,10 @@ int main() {
 	while (std::getline(std::cin, codeline)) {
 		infix = parseLexem(codeline);
 		postfix = buildPostfix(infix);
-		cout << "Postfix: ";
-		for (int i = 0; i < postfix.size(); ++i) {
-			postfix[i]->print();
-		}
+		// cout << "Postfix: ";
+		// for (int i = 0; i < postfix.size(); ++i) {
+		// 	postfix[i]->print();
+		// }
 		cout << '\n';
 		value = evaluatePostfix(postfix);
 		cout << "Result: " << value << '\n';
