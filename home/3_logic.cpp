@@ -23,6 +23,7 @@ public:
 	virtual int getPriority() { }
 	virtual void print() { }
 	virtual string getName() { }
+	virtual ~Lexem() { }
 };
 
 class Number: public Lexem {
@@ -44,16 +45,16 @@ void Number::print() {
 
 enum OPERATOR {
 	LBRACKET, RBRACKET,
-	ASSIGN,
+	EQ,
 	OR,
 	AND,
 	BITOR,
 	XOR,
 	BITAND,
-	EQ, NEQ,
+	SHL, SHR,
+	ASSIGN, NEQ,
 	LEQ, LT,
 	GEQ, GT,
-	SHL, SHR,
 	PLUS, MINUS,
 	MULT, DIV, MOD
 };
@@ -75,16 +76,16 @@ int PRIORITY[] = {
 
 string OPERTEXT[] = {
 	"(", ")",
-	"=",
+	"==",
 	"or",
 	"and",
 	"|",
 	"^",
 	"&",
-	"==", "!=",
+	"<<", ">>",
+	"=", "!=",
 	"<=", "<",
 	">=", ">",
-	"<<", ">>",
 	"+", "-",
 	"*", "/", "%"
 };
@@ -154,7 +155,7 @@ void Variable::print() {
 	cout << name << " ";
 }
 
-std::map<std::string, int> m;
+std::map<std::string, int> variableMap;
 
 bool checkOperator(char ch) {
 	return (ch == '+' || ch == '-' ||
@@ -245,7 +246,7 @@ bool checkBuild(int type, int prevPriority, int currentPriority) {
 			(type != ASSIGN && prevPriority >= currentPriority));
 }
 
-vector<Lexem *> buildPostfix(vector<Lexem *> infix) {
+vector<Lexem *> buildPostfix(vector<Lexem *> &infix) {
 	int i, j;
 	stack<Oper *> opstack;
 	vector<Lexem *> postfix;
@@ -256,27 +257,25 @@ vector<Lexem *> buildPostfix(vector<Lexem *> infix) {
 		if (infix[i]->getLexType() == OPER) {
 			if (infix[i]->getType() == LBRACKET) {
 				opstack.push((Oper *)infix[i]);
-			} else {
-				if (infix[i]->getType() == RBRACKET) {
-					for (j = opstack.size(); j > 0 && opstack.top()->getType() != LBRACKET; j--) {
-						postfix.push_back(opstack.top());
-						opstack.pop();
-					}
+			} else if (infix[i]->getType() == RBRACKET) {
+				for (j = opstack.size(); j > 0 && opstack.top()->getType() != LBRACKET; j--) {
+					postfix.push_back(opstack.top());
 					opstack.pop();
-				} else {
-					while (!opstack.empty() && checkBuild(infix[i]->getType(), 
-						    opstack.top()->getPriority(), infix[i]->getPriority())) {
-						postfix.push_back(opstack.top());
-						opstack.pop();
-					}
-					opstack.push((Oper *)infix[i]);
 				}
+				opstack.pop();
+			} else {
+				while (!opstack.empty() && checkBuild(infix[i]->getType(), 
+					    opstack.top()->getPriority(), infix[i]->getPriority())) {
+					postfix.push_back(opstack.top());
+					opstack.pop();
+				}
+				opstack.push((Oper *)infix[i]);
 			}
 		}
 		if (infix[i]->getLexType() == VARIABLE) {
 			postfix.push_back(infix[i]);
-		//	if (m.count(infix[i]->getName()) == 0)
-		//		m[infix[i]->getName()] = infix[i]->getValue();
+		//	if (variableMap.count(infix[i]->getName()) == 0)
+		//		variableMap[infix[i]->getName()] = infix[i]->getValue();
 		}
 	}
 	for (i = opstack.size(); i > 0; i--) {
@@ -297,10 +296,24 @@ Lexem *checkForEvaluate(vector<Lexem *> poliz, stack<Lexem *> &computationStack)
 	return tmp;
 }
 
-int evaluatePostfix(vector<Lexem *> poliz) {
+void deleteStack(stack<Lexem *> stackOfLexemes) {
+	while (!stackOfLexemes.empty()) {
+		delete stackOfLexemes.top();
+		stackOfLexemes.pop();
+	}
+}
+
+void deleteVector(vector<Lexem *> vectorOfLexemes) {
+	for (int i = 0; i < vectorOfLexemes.size(); ++i) {
+		delete vectorOfLexemes[i];
+	}
+}
+
+int evaluatePostfix(vector<Lexem *> &poliz) {
 	int value;
 	Lexem *left, *right;
 	stack<Lexem *> computationStack;
+	vector <Lexem *> recycle;
 	for (int i = 0; i < poliz.size(); i++) {
 		if (poliz[i]->getLexType() == NUMBER || poliz[i]->getLexType() == VARIABLE) {
 			computationStack.push(poliz[i]);
@@ -308,27 +321,29 @@ int evaluatePostfix(vector<Lexem *> poliz) {
 		if (poliz[i]->getLexType() == OPER) {
 			right = checkForEvaluate(poliz, computationStack);
 			left = checkForEvaluate(poliz, computationStack);
+			recycle.push_back(right);
+			recycle.push_back(left);
+			if (right->getLexType() == VARIABLE) {
+				right = new Number(variableMap[right->getName()]);
+				recycle.push_back(right);
+			}
 			if (poliz[i]->getType() == ASSIGN) {
-				if (right->getLexType() == VARIABLE) {
-					right = new Number(m[right->getName()]);
-				}
-				m[left->getName()] = right->getValue();
+				variableMap[left->getName()] = right->getValue();
 				Number *num = new Number(right->getValue());
+				recycle.push_back(num);
 				computationStack.push(num);
-			} else {
-				if (right->getLexType() == VARIABLE) {
-					right = new Number(m[right->getName()]);
-				}
-				if (left->getLexType() == VARIABLE) {
-					left = new Number(m[left->getName()]);
-				}
+			} else if (left->getLexType() == VARIABLE) {
+				left = new Number(variableMap[left->getName()]);
+				recycle.push_back(left);
+			}
 				value = poliz[i]->getValue(left->getValue(), right->getValue());
 				Number *num = new Number(value);
 				computationStack.push(num);
-			}
+				recycle.push_back(num);
 		}
 	}
-	return computationStack.top()->getValue();
+	deleteVector(recycle);
+	return value;
 }
 
 int main() {
@@ -348,9 +363,10 @@ int main() {
 		value = evaluatePostfix(postfix);
 		cout << "Result: " << value << '\n';
 		cout << "Variable map:\n";
-		for (auto it = m.begin(); it != m.end(); ++it)
+		for (auto it = variableMap.begin(); it != variableMap.end(); ++it)
 			cout << (*it).first << " = " << (*it).second << endl;
 		cout << endl;
+		deleteVector(infix);
 	}
 	return 0;
 }
