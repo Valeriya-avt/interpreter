@@ -17,7 +17,7 @@ public:
 	virtual void print();
 	virtual string getName();
 	virtual int getRow();
-	virtual int inVarsAndLabelsMap();
+	virtual int inLabelsMap();
 	virtual ~Lexem();
 };
 
@@ -55,7 +55,7 @@ public:
 	Variable(string str, int value = 0);
 	void print();
 	string getName();
-	int inVarsAndLabelsMap();
+	int inLabelsMap();
 };
 
 #endif

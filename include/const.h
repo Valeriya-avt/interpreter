@@ -27,4 +27,5 @@ enum OPERATOR {
 extern int PRIORITY[];
 extern std::string OPERTEXT[];
 extern int OP_NUM;
-extern std::map<std::string, int> varsAndLabelsMap;
+extern std::map<std::string, int> variablesMap;
+extern std::map<std::string, int> labelsMap;
