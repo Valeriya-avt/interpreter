@@ -4,32 +4,39 @@
 #include <stack>
 #include <map>
 #include "lexem.h"
-//#include "const.h"
 #include "lexical.h"
 #include "syntax.h"
 #include "semantic.h"
 
+using namespace std;
+
 int main() {
 	string codeline;
-	vector<Lexem *> infix;
-	vector<Lexem *> postfix;
-	int value;
-
-	while (std::getline(std::cin, codeline)) {
-		infix = parseLexem(codeline);
-		postfix = buildPostfix(infix);
-		// cout << "Postfix: ";
-		// for (int i = 0; i < postfix.size(); ++i) {
-		// 	postfix[i]->print();
-		// }
-		cout << '\n';
-		value = evaluatePostfix(postfix);
-		cout << "Result: " << value << '\n';
-		cout << "Variable map:\n";
-		for (auto it = variableMap.begin(); it != variableMap.end(); ++it)
-			cout << (*it).first << " = " << (*it).second << endl;
+	vector<vector<Lexem *>> infixLines, postfixLines;
+	int value, row;  
+	while (std::getline(std::cin, codeline) && codeline != "ret") {
+		infixLines.push_back(parseLexem(codeline));
+	}
+	for (row = 0; row < infixLines.size(); ++row) {
+		initLabels(infixLines[row], row);
+	}
+	for (const auto &infix: infixLines) {
+		postfixLines.push_back(buildPostfix(infix));
+	}
+	row = 0;
+	while (0 <= row && row < postfixLines.size()) {
+		cout << row << ": ";
+		for (int j = 0; j < postfixLines[row].size(); j++)
+			postfixLines[row][j]->print();
 		cout << endl;
-		deleteVector(infix);
+		value = evaluatePostfix(postfixLines[row], &row);
+		cout << "Variables and labels: ";
+		for (auto it = varsAndLabelsMap.begin(); it != varsAndLabelsMap.end(); ++it)
+			cout << (*it).first << " = " << (*it).second << " | ";
+		cout << "\n\n";
+	}
+	for (int i = 0; i < infixLines.size(); i++) {
+		deleteVector(infixLines[i]);
 	}
 	return 0;
 }

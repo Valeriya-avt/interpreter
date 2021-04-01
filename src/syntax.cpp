@@ -3,6 +3,7 @@
 #include <string>
 #include <stack>
 #include <map>
+
 #include "lexem.h"
 
 bool checkBuild(int type, int prevPriority, int currentPriority) {
@@ -10,11 +11,21 @@ bool checkBuild(int type, int prevPriority, int currentPriority) {
 			(type != ASSIGN && prevPriority >= currentPriority));
 }
 
-vector<Lexem *> buildPostfix(vector<Lexem *> &infix) {
+void joinGotoAndLabel(Variable *lexemvar, stack<Oper *> &opstack) {
+	if (opstack.top()->getType() == GOTO) {
+		Goto *lexemgoto = (Goto*)opstack.top();
+		lexemgoto->setRow(varsAndLabelsMap[lexemvar->getName()]);
+	}
+}
+
+vector<Lexem *> buildPostfix(const vector<Lexem *> &infix) {
 	int i, j;
 	stack<Oper *> opstack;
 	vector<Lexem *> postfix;
 	for (i = 0; i < infix.size(); i++) {
+		if (infix[i] == nullptr) {
+			continue;
+		}
 		if (infix[i]->getLexType() == NUMBER) {
 			postfix.push_back(infix[i]);
 		}
@@ -37,9 +48,12 @@ vector<Lexem *> buildPostfix(vector<Lexem *> &infix) {
 			}
 		}
 		if (infix[i]->getLexType() == VARIABLE) {
-			postfix.push_back(infix[i]);
-		//	if (variableMap.count(infix[i]->getName()) == 0)
-		//		variableMap[infix[i]->getName()] = infix[i]->getValue();
+			if (infix[i]->inVarsAndLabelsMap())
+				joinGotoAndLabel((Variable *)infix[i], opstack);
+			else
+				postfix.push_back(infix[i]);
+		//	if (varsAndLabelsMap.count(infix[i]->getName()) == 0)
+		//		varsAndLabelsMap[infix[i]->getName()] = infix[i]->getValue();
 		}
 	}
 	for (i = opstack.size(); i > 0; i--) {

@@ -15,7 +15,8 @@ int PRIORITY[] = {
 	7, 7,
 	8, 8,
 	9, 9,
-	10, 10, 10
+	10, 10, 10,
+	11, 11
 };
 
 std::string OPERTEXT[] = {
@@ -27,13 +28,14 @@ std::string OPERTEXT[] = {
 	"^",
 	"&",
 	"<<", ">>",
-	"=", "!=",
+	":=", "!=",
 	"<=", "<",
 	">=", ">",
 	"+", "-",
-	"*", "/", "%"
+	"*", "/", "%",
+	"goto", ":"
 };
 
 int OP_NUM = sizeof(OPERTEXT) / sizeof(std::string);
 
-std::map<std::string, int> variableMap;
+std::map<std::string, int> varsAndLabelsMap;

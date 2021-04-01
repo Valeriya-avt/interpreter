@@ -2,7 +2,6 @@
 #include <vector>
 #include <string>
 #include <stack>
-#include <map>
 
 #include "lexem.h"
 
@@ -23,7 +22,11 @@ Oper *getOper(string codeline, int pos, int &next) {
 		string subcodeline = codeline.substr(pos, OPERTEXT[op].size());
 		if (OPERTEXT[op] == subcodeline) {
 			next = pos + OPERTEXT[op].size();
-			return new Oper(op);
+			if (OPERTEXT[op] == "goto") {
+				return new Goto(op);
+			}
+			else
+				return new Oper(op);
 		}
 	}
 	return nullptr;

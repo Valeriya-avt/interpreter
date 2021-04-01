@@ -1,6 +1,7 @@
 #include <iostream>
 #include "lexem.h"
 //#include "const.h"
+//using namespace std;
 
 Lexem::Lexem() { }
 int Lexem::getLexType() {return type;}
@@ -10,6 +11,8 @@ int Lexem::getValue(int a, int b) {return 0;}
 int Lexem::getPriority() {return 0;}
 void Lexem::print() { }
 string Lexem::getName() {return "";}
+int Lexem::getRow() { }
+int Lexem::inVarsAndLabelsMap() { }
 Lexem::~Lexem() { }
 
 int Number::getValue(int a, int b) {return value;}
@@ -19,7 +22,7 @@ Number::Number(int number) {
 	this->setType(NUMBER);
 }
 
-void Number::print() {cout << value << " ";}
+void Number::print() {cout << "[" << value << "] ";}
 
 Oper::Oper(int index = 0) {
 	this->setType(OPER);
@@ -55,10 +58,25 @@ int Oper::getValue(int left, int right) {
 
 void Oper::print() {
 	switch (this->getType()) {
-		case PLUS: cout << "+ "; break;
-		case MINUS: cout << "- "; break;
-		case MULT: cout << "* "; break;
-		case ASSIGN: cout << "= "; break;
+		case PLUS: cout << "[+] "; break;
+		case MINUS: cout << "[-] "; break;
+		case MULT: cout << "[*] "; break;
+		case ASSIGN: cout << "[:=] "; break;
+		case OR: cout << "[or] "; break;
+		case AND: cout << "[and] "; break;
+		case BITOR: cout << "[|] "; break;
+		case XOR: cout << "[^] "; break;
+		case BITAND: cout << "[&] "; break;
+		case EQ: cout << "[==] "; break;
+		case NEQ: cout << "[!=] "; break;
+		case LEQ: cout << "[<=] "; break;
+		case LT: cout << "[<] "; break;
+		case GEQ: cout << "[>=] "; break;
+		case GT: cout << "[>] "; break;
+		case SHL: cout << "[<<] "; break;
+		case SHR: cout << "[>>] "; break;
+		case DIV: cout << "[/] "; break;
+		case MOD: cout << "[%] "; break;
 	}
 }
 
@@ -67,6 +85,26 @@ Variable::Variable(string str, int value) {
 	this->setType(VARIABLE);
 }
 
-void Variable::print() {cout << name << " ";}
+void Variable::print() { cout << "[" << name << "] "; }
 
 string Variable::getName() {return name;}
+
+int Variable::inVarsAndLabelsMap() {
+	auto it = varsAndLabelsMap.find(name);
+	if (it == varsAndLabelsMap.end())
+		return 0;
+	else
+		return 1;
+}
+
+Goto::Goto(int optype): Oper(optype) {
+	row = UNDEFINED;
+}
+
+void Goto::setRow(int row) { Goto::row = row; }
+
+int Goto::getRow() { return row; }
+
+void Goto::print() {
+	cout << "[<row " << row << ">]\n";
+}
