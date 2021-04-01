@@ -3,18 +3,20 @@
 #include <string>
 #include <stack>
 #include <map>
+#include <fstream>
+
 #include "lexem.h"
 #include "lexical.h"
 #include "syntax.h"
 #include "semantic.h"
 
-using namespace std;
-
-int main() {
+int main(int argc, char **argv) {
 	string codeline;
+	std::ifstream file;
+	file.open(argv[1]);
 	vector<vector<Lexem *>> infixLines, postfixLines;
 	int value, row;  
-	while (std::getline(std::cin, codeline) && codeline != "ret") {
+	while (std::getline(file, codeline)) {
 		infixLines.push_back(parseLexem(codeline));
 	}
 	for (row = 0; row < infixLines.size(); ++row) {
@@ -38,5 +40,6 @@ int main() {
 	for (int i = 0; i < infixLines.size(); i++) {
 		deleteVector(infixLines[i]);
 	}
+	file.close();
 	return 0;
 }
