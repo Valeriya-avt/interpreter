@@ -4,7 +4,7 @@
 enum LEX_TYPE {
 	NUMBER,
 	OPER,
-	VARIABLE
+	VARIABLE,
 };
 
 enum OPERATOR {
@@ -20,10 +20,11 @@ enum OPERATOR {
 	LEQ, LT,
 	GEQ, GT,
 	PLUS, MINUS,
-	MULT, DIV, MOD
+	MULT, DIV, MOD,
+	GOTO, COLON
 };
 
 extern int PRIORITY[];
 extern std::string OPERTEXT[];
 extern int OP_NUM;
-extern std::map<std::string, int> variableMap;
+extern std::map<std::string, int> varsAndLabelsMap;

@@ -16,6 +16,8 @@ public:
 	virtual int getPriority();
 	virtual void print();
 	virtual string getName();
+	virtual int getRow();
+	virtual int inVarsAndLabelsMap();
 	virtual ~Lexem();
 };
 
@@ -37,12 +39,23 @@ public:
 	void print();
 };
 
+class Goto : public Oper {
+	int row;
+public: 
+	enum { UNDEFINED = -INT32_MAX };
+	Goto(int optype);
+	void setRow(int row);
+	int getRow();
+	void print();
+};
+
 class Variable: public Lexem {
 	string name;
 public:
 	Variable(string str, int value = 0);
 	void print();
 	string getName();
+	int inVarsAndLabelsMap();
 };
 
 #endif
