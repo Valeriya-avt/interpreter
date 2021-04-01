@@ -29,7 +29,7 @@ void initLabels(vector<Lexem *> &infix, int row) {
 			Variable *lexemvar = (Variable *)infix[i - 1];
 			Oper *lexemop = (Oper *)infix[i];
 			if (lexemop->getType() == COLON) {
-				varsAndLabelsMap[lexemvar->getName()] = row;
+				labelsMap[lexemvar->getName()] = row;
 				delete infix[i - 1];
 				delete infix[i];
 				infix[i - 1] = nullptr;
@@ -60,16 +60,16 @@ int evaluatePostfix(vector<Lexem *> &poliz, int *row) {
 			recycle.push_back(right);
 			recycle.push_back(left);
 			if (right->getLexType() == VARIABLE) {
-				right = new Number(varsAndLabelsMap[right->getName()]);
+				right = new Number(variablesMap[right->getName()]);
 				recycle.push_back(right);
 			}
 			if (poliz[i]->getType() == ASSIGN) {
-				varsAndLabelsMap[left->getName()] = right->getValue();
+				variablesMap[left->getName()] = right->getValue();
 				Number *num = new Number(right->getValue());
 				recycle.push_back(num);
 				computationStack.push(num);
 			} else if (left->getLexType() == VARIABLE) {
-				left = new Number(varsAndLabelsMap[left->getName()]);
+				left = new Number(variablesMap[left->getName()]);
 				recycle.push_back(left);
 			}
 				value = poliz[i]->getValue(left->getValue(), right->getValue());

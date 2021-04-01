@@ -38,4 +38,5 @@ std::string OPERTEXT[] = {
 
 int OP_NUM = sizeof(OPERTEXT) / sizeof(std::string);
 
-std::map<std::string, int> varsAndLabelsMap;
+std::map<std::string, int> variablesMap;
+std::map<std::string, int> labelsMap;

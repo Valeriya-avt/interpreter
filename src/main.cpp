@@ -30,8 +30,8 @@ int main() {
 			postfixLines[row][j]->print();
 		cout << endl;
 		value = evaluatePostfix(postfixLines[row], &row);
-		cout << "Variables and labels: ";
-		for (auto it = varsAndLabelsMap.begin(); it != varsAndLabelsMap.end(); ++it)
+		cout << "Variables: ";
+		for (auto it = variablesMap.begin(); it != variablesMap.end(); ++it)
 			cout << (*it).first << " = " << (*it).second << " | ";
 		cout << "\n\n";
 	}

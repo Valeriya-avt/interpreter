@@ -14,7 +14,7 @@ bool checkBuild(int type, int prevPriority, int currentPriority) {
 void joinGotoAndLabel(Variable *lexemvar, stack<Oper *> &opstack) {
 	if (opstack.top()->getType() == GOTO) {
 		Goto *lexemgoto = (Goto*)opstack.top();
-		lexemgoto->setRow(varsAndLabelsMap[lexemvar->getName()]);
+		lexemgoto->setRow(labelsMap[lexemvar->getName()]);
 	}
 }
 
@@ -48,7 +48,8 @@ vector<Lexem *> buildPostfix(const vector<Lexem *> &infix) {
 			}
 		}
 		if (infix[i]->getLexType() == VARIABLE) {
-			if (infix[i]->inVarsAndLabelsMap())
+			//if (infix[i + 1] && infix[i + 1]->getType == GOTO)
+			if (infix[i]->inLabelsMap())
 				joinGotoAndLabel((Variable *)infix[i], opstack);
 			else
 				postfix.push_back(infix[i]);

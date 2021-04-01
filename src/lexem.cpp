@@ -12,7 +12,7 @@ int Lexem::getPriority() {return 0;}
 void Lexem::print() { }
 string Lexem::getName() {return "";}
 int Lexem::getRow() { }
-int Lexem::inVarsAndLabelsMap() { }
+int Lexem::inLabelsMap() { }
 Lexem::~Lexem() { }
 
 int Number::getValue(int a, int b) {return value;}
@@ -89,9 +89,9 @@ void Variable::print() { cout << "[" << name << "] "; }
 
 string Variable::getName() {return name;}
 
-int Variable::inVarsAndLabelsMap() {
-	auto it = varsAndLabelsMap.find(name);
-	if (it == varsAndLabelsMap.end())
+int Variable::inLabelsMap() {
+	auto it = labelsMap.find(name);
+	if (it == labelsMap.end())
 		return 0;
 	else
 		return 1;
