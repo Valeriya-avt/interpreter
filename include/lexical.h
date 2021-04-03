@@ -5,3 +5,6 @@ Oper *getOper(string codeline, int pos, int &next);
 Number *getNumber(string codeline, int pos, int &next);
 Variable *getVariable(string codeline, int pos, int &next);
 bool checkSeparators(char ch);
+bool isGoTo(OPERATOR numOfOper);
+void initLabels(vector<Lexem *> &infix, int row);
+void initJumps(vector<vector<Lexem *>> &infixes);

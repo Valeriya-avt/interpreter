@@ -16,6 +16,7 @@ public:
 	virtual int getPriority();
 	virtual void print();
 	virtual string getName();
+	virtual void setRow(int row);
 	virtual int getRow();
 	virtual int inLabelsMap();
 	virtual ~Lexem();
