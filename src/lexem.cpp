@@ -11,6 +11,7 @@ int Lexem::getValue(int a, int b) {return 0;}
 int Lexem::getPriority() {return 0;}
 void Lexem::print() { }
 string Lexem::getName() {return "";}
+void Lexem::setRow(int row) { }
 int Lexem::getRow() { }
 int Lexem::inLabelsMap() { }
 Lexem::~Lexem() { }
@@ -58,6 +59,7 @@ int Oper::getValue(int left, int right) {
 
 void Oper::print() {
 	switch (this->getType()) {
+		case COLON: cout <<"[:] "; break;
 		case PLUS: cout << "[+] "; break;
 		case MINUS: cout << "[-] "; break;
 		case MULT: cout << "[*] "; break;

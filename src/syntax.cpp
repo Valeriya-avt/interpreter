@@ -12,7 +12,7 @@ bool checkBuild(int type, int prevPriority, int currentPriority) {
 }
 
 void joinGotoAndLabel(Variable *lexemvar, stack<Oper *> &opstack) {
-	if (opstack.top()->getType() == GOTO) {
+	if (!opstack.empty() && opstack.top() != nullptr && opstack.top()->getType() == GOTO) {
 		Goto *lexemgoto = (Goto*)opstack.top();
 		lexemgoto->setRow(labelsMap[lexemvar->getName()]);
 	}
@@ -30,6 +30,8 @@ vector<Lexem *> buildPostfix(const vector<Lexem *> &infix) {
 			postfix.push_back(infix[i]);
 		}
 		if (infix[i]->getLexType() == OPER) {
+			if (infix[i]->getType() == ENDIF)
+				continue;
 			if (infix[i]->getType() == LBRACKET) {
 				opstack.push((Oper *)infix[i]);
 			} else if (infix[i]->getType() == RBRACKET) {
@@ -53,8 +55,8 @@ vector<Lexem *> buildPostfix(const vector<Lexem *> &infix) {
 				joinGotoAndLabel((Variable *)infix[i], opstack);
 			else
 				postfix.push_back(infix[i]);
-		//	if (variablesMap.count(infix[i]->getName()) == 0)
-		//		variablesMap[infix[i]->getName()] = infix[i]->getValue();
+			//if (variablesMap.count(infix[i]->getName()) == 0)
+			//	variablesMap[infix[i]->getName()] = infix[i]->getValue();
 		}
 	}
 	for (i = opstack.size(); i > 0; i--) {

@@ -8,7 +8,8 @@
 
 Lexem *checkForEvaluate(vector<Lexem *> &poliz, stack<Lexem *> &computationStack) {
 	Lexem *tmp;
-	if (computationStack.top()->getLexType() == NUMBER) {
+	if (!computationStack.empty() && computationStack.top() != nullptr && 
+		computationStack.top()->getLexType() == NUMBER) {
 		tmp = new Number(computationStack.top()->getValue());
 	} else {
 		tmp = new Variable(computationStack.top()->getName());
@@ -23,23 +24,6 @@ void deleteVector(vector<Lexem *> &vectorOfLexemes) {
 	}
 }
 
-void initLabels(vector<Lexem *> &infix, int row) {
-	for (int i = 1; i < infix.size(); i++) {
-		if (infix[i - 1]->getLexType() == VARIABLE && infix[i]->getLexType() == OPER) {
-			Variable *lexemvar = (Variable *)infix[i - 1];
-			Oper *lexemop = (Oper *)infix[i];
-			if (lexemop->getType() == COLON) {
-				labelsMap[lexemvar->getName()] = row;
-				delete infix[i - 1];
-				delete infix[i];
-				infix[i - 1] = nullptr;
-				infix[i] = nullptr;
-				i++;
-			}
-		}
-	}
-}
-
 int evaluatePostfix(vector<Lexem *> &poliz, int *row) {
 	int value;
 	Lexem *left, *right;
@@ -50,10 +34,21 @@ int evaluatePostfix(vector<Lexem *> &poliz, int *row) {
 			computationStack.push(poliz[i]);
 		}
 		if (poliz[i]->getLexType() == OPER) {
-			if (poliz[i]->getType() == GOTO) {
+			if (poliz[i]->getType() == GOTO || poliz[i]->getType() == ELSE || 
+				poliz[i]->getType() == ENDWHILE) {
 			//	cout << "poliz[i]->getRow() == " << poliz[i]->getRow() << endl;
 				*row = poliz[i]->getRow();
+				deleteVector(recycle);
 				return poliz[i]->getRow();
+			}
+			if (poliz[i]->getType() == IF || poliz[i]->getType() == WHILE) {
+				if (!(computationStack.top()->getValue())) {
+					computationStack.pop();
+					*row = poliz[i]->getRow();
+					deleteVector(recycle);
+					return poliz[i]->getRow();
+				}
+				computationStack.pop();
 			}
 			right = checkForEvaluate(poliz, computationStack);
 			left = checkForEvaluate(poliz, computationStack);
