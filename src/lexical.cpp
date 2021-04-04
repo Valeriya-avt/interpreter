@@ -118,42 +118,28 @@ void initJumps(vector<vector<Lexem *>> &infixes) {
 	stack<Goto *> stackIfElse;
 	stack<Goto *> stackWhile;
 	for (int row = 0; row < infixes.size(); row++) {
-		//cout << "row = " << row << endl;
 		for (int i = 0; i < infixes[row].size(); i++) {
-		//	cout << "i = " << i << endl;
 			if (infixes[row][i] != nullptr && infixes[row][i]->getLexType() == OPER) {
-			//	cout << "cout1\n";
-				//Oper *lexemoper = (Oper *)infixes[row][i];
 				if (infixes[row][i]->getType() == IF) {
-				//	cout << "cout2\n";
 					stackIfElse.push((Goto *)infixes[row][i]);
 				}
-			//	cout << "cout4\n";
 				if (infixes[row][i]->getType() == ELSE) {
-			//		cout << "cout2\n";
 					stackIfElse.top()->setRow(row + 1);
 					stackIfElse.pop();
 					stackIfElse.push((Goto *)infixes[row][i]);
 					labelsMap[OPERTEXT[infixes[row][i]->getType()]] = row + 1;
 				}
-			//	cout << "cout5\n";
 				if (infixes[row][i]->getType() == ENDIF) {
-			//		cout << "cout3\n";
 					stackIfElse.top()->setRow(row + 1);
 					stackIfElse.pop();
 					labelsMap[OPERTEXT[infixes[row][i]->getType()]] = row + 1;
 				}
-			//	cout << "cout6\n";
 				if (infixes[row][i]->getType() == WHILE) {
-			//		cout << "cout8\n";
-			//		Goto *lexemgoto = (Goto *)lexemoper;
 					infixes[row][i]->setRow(row);
 					stackWhile.push((Goto *)infixes[row][i]);
+					labelsMap[OPERTEXT[infixes[row][i]->getType()]] = row;
 				}
-			//	cout << "cout7\n";
 				if (infixes[row][i]->getType() == ENDWHILE) {
-			//		cout << "cout9\n";
-			//		Goto *lexemgoto = (Goto *)lexemoper;
 					infixes[row][i]->setRow(stackWhile.top()->getRow());
 					stackWhile.top()->setRow(row + 1);
 					stackWhile.pop();

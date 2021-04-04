@@ -59,6 +59,12 @@ int Oper::getValue(int left, int right) {
 
 void Oper::print() {
 	switch (this->getType()) {
+		case IF: cout <<"[if] "; break;
+		case THEN: cout <<"[then] "; break;
+		case ELSE: cout <<"[else] "; break;
+		case ENDIF: cout <<"[endif] "; break;
+		case WHILE: cout <<"[while] "; break;
+		case ENDWHILE: cout <<"[endwhile] "; break;
 		case COLON: cout <<"[:] "; break;
 		case PLUS: cout << "[+] "; break;
 		case MINUS: cout << "[-] "; break;
@@ -108,5 +114,5 @@ void Goto::setRow(int row) { Goto::row = row; }
 int Goto::getRow() { return row; }
 
 void Goto::print() {
-	cout << "[<row " << row << ">]\n";
+	cout << "[<row " << row << ">" << OPERTEXT[this->getType()] << "] ";
 }
