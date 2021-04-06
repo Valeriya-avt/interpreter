@@ -26,6 +26,6 @@ Let's take a look at some of the main points.
 
 | Opername | ASSIGN | OR | AND | BITOR | XOR | BITAND | EQ | NEQ | SHL | SHR | LEQ | LT | GEQ | GT | PLUS | MINUS | MULT | DIV | MOD |
 |----------|--------|----|-----|-------|-----|--------|----|-----|-----|-----|-----|----|-----|----|------|-------|------|-----|-----|
-|  Symbol  |   :=   | or | and |  /|   | /^  |   /&   | == | !=  | <<  |  >> |  <= |  < |  >= |  > |   +  |   -   |  /*  |  /  | /%  |
+|  Symbol  |   :=   | or | and |  "|"  |  ^  |   \&   | == | !=  | <<  |  >> |  <= |  < |  >= |  > |  \+  |  \-   |  \*  |  /  | /%  |
 
 
