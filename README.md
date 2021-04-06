@@ -44,25 +44,25 @@ Let's take a look at some of the main points.
 |----------|-----|--------|-----|-----|
 |  Symbol  |  ^  |    &   | <<  |  >> |
 
->Logical operators:
+>**Logical operators:**
 
 | Opername | OR | AND | EQ | NEQ | LEQ | LT | GEQ | GT | 
 |----------|----|-----|----|-----|-----|----|-----|----|
 |  Symbol  | or | and | == | !=  |<= |  < |  >= |  > | 
 
->Jump operator:
+>**Jump operator:**
 
 | Opername | GOTO |
 |----------|------|
 |  Symbol  | goto |
 
->Conditional operator:
+>**Conditional operator:**
 
 | Opername | IF | THEN | ELSE | ENDIF |
 |----------|----|------|------|-------|
 |  Symbol  | if | then | else | endif |
 
->`While` cycle:
+>**`While` cycle:**
 
 |   Name   | WHILE | THEN | ENDWHILE | 
 |----------|-------|------|----------|
