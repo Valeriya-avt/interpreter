@@ -1,10 +1,10 @@
 <br><img src="./image/interpreter.png" width="30%" alt = "image" align = "left"/> 
-Welcome!
-Tired of fixing compiler errors? <br/>
-Do you keep forgetting the semicolon? <br/>
-Are you missing the capabilities of your favorite programming language? <br/><br/>
+**Welcome!** <br/>
+*Tired of fixing compiler errors?* <br/>
+*Do you keep forgetting the semicolon?* <br/>
+*Are you missing the capabilities of your favorite programming language?* <br/><br/>
 
-We will help you! Let's write an interpreter for our own programming language, and no one but us can give us errors.
+**We will help you! Let's write an interpreter for our own programming language, and no one but us can give us errors.**
 
 <cut />
 <br clear = "left">
