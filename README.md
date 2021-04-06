@@ -26,19 +26,19 @@ Let's take a look at some of the main points.
 
 **We can use**
 
->Arithmetic operators:
+>**Arithmetic operators:**
 
 | Opername |PLUS | MINUS | MULT | DIV | MOD |
 |----------|-----|-------|------|-----|-----|
 |  Symbol  | \+  |  \-   |  \*  |  /  | /%  |
 
->Assignment operator:
+>**Assignment operator:**
 
 | Opername | ASSIGN |
 |----------|--------|
 |  Symbol  |   :=   |
 
->Bitwise operators:
+>**Bitwise operators:**
 
 | Opername | XOR | BITAND | SHL | SHR |
 |----------|-----|--------|-----|-----|
