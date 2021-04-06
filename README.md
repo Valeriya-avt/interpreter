@@ -9,6 +9,8 @@
 <cut />
 <br clear = "left">
 
+---
+
 ### This interpreter can:
  * Read code from file;
  * Divide the code into tokens by creating an infix notation;
@@ -19,3 +21,11 @@
  * Realize the work of the transport operator (goto);
  * Handle a conditional statement;
  * Work with a `while` cycle. 
+
+Let's take a look at some of the main points.
+
+| Opername | ASSIGN | OR | AND | BITOR | XOR | BITAND | EQ | NEQ | SHL | SHR | LEQ | LT | GEQ | GT | PLUS | MINUS | MULT | DIV | MOD |
+|----------|--------|----|-----|-------|-----|--------|----|-----|-----|-----|-----|----|-----|----|------|-------|------|-----|-----|
+|  Symbol  |   :=   | or | and |  /|   | /^  |   /&   | == | !=  | <<  |  >> |  <= |  < |  >= |  > |   +  |   -   |  /*  |  /  | /%  |
+
+
