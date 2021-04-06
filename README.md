@@ -30,41 +30,41 @@ Let's take a look at some of the main points.
 
 | Opername |PLUS | MINUS | MULT | DIV | MOD |
 |----------|-----|-------|------|-----|-----|
-|  Symbol  | \+  |  \-   |  \*  |  /  |  %  |
+|**Symbol**| \+  |  \-   |  \*  |  /  |  %  |
 
 >**Assignment operator:**
 
 | Opername | ASSIGN |
 |----------|--------|
-|  Symbol  |   :=   |
+|**Symbol**|   :=   |
 
 >**Bitwise operators:**
 
 | Opername | XOR | BITAND | SHL | SHR |
 |----------|-----|--------|-----|-----|
-|  Symbol  |  ^  |    &   | <<  |  >> |
+|**Symbol**|  ^  |    &   | <<  |  >> |
 
 >**Logical operators:**
 
 | Opername | OR | AND | EQ | NEQ | LEQ | LT | GEQ | GT | 
 |----------|----|-----|----|-----|-----|----|-----|----|
-|  Symbol  | or | and | == | !=  |<= |  < |  >= |  > | 
+|**Symbol**| or | and | == | !=  |<= |  < |  >= |  > | 
 
 >**Jump operator:**
 
 | Opername | GOTO |
 |----------|------|
-|  Symbol  | goto |
+|**Symbol**| goto |
 
 >**Conditional operator:**
 
 | Opername | IF | THEN | ELSE | ENDIF |
 |----------|----|------|------|-------|
-|  Symbol  | if | then | else | endif |
+|**Symbol**| if | then | else | endif |
 
 >**`While` cycle:**
 
 |   Name   | WHILE | THEN | ENDWHILE | 
 |----------|-------|------|----------|
-|  Symbol  | while | then | endwhile |
+|**Symbol**| while | then | endwhile |
 
