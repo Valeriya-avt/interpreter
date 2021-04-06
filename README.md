@@ -18,7 +18,7 @@
  * Work with arithmetic operators;
  * Handle the assignment operator;
  * Work with logical operators;
- * Realize the work of the transport operator (goto);
+ * Realize the work of the jump operator (`goto`);
  * Handle a conditional statement;
  * Work with a `while` cycle. 
 
@@ -30,7 +30,7 @@ Let's take a look at some of the main points.
 
 | Opername |PLUS | MINUS | MULT | DIV | MOD |
 |----------|-----|-------|------|-----|-----|
-|  Symbol  | \+  |  \-   |  \*  |  /  | /%  |
+|  Symbol  | \+  |  \-   |  \*  |  /  |  %  |
 
 >**Assignment operator:**
 
