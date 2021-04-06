@@ -18,4 +18,4 @@
  * Work with logical operators;
  * Realize the work of the transport operator (goto);
  * Handle a conditional statement;
- * Work with a while cycle. 
+ * Work with a `while` cycle. 
