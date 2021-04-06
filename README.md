@@ -1,5 +1,5 @@
 <br><img src="./image/interpreter.png" width="30%" alt = "image" align = "left"/> 
-**Welcome!** <br/>
+### Welcome!
 *Tired of fixing compiler errors?* <br/>
 *Do you keep forgetting the semicolon?* <br/>
 *Are you missing the capabilities of your favorite programming language?* <br/><br/>
