@@ -24,8 +24,47 @@
 
 Let's take a look at some of the main points.
 
-| Opername | ASSIGN | OR | AND | BITOR | XOR | BITAND | EQ | NEQ | SHL | SHR | LEQ | LT | GEQ | GT | PLUS | MINUS | MULT | DIV | MOD |
-|----------|--------|----|-----|-------|-----|--------|----|-----|-----|-----|-----|----|-----|----|------|-------|------|-----|-----|
-|  Symbol  |   :=   | or | and |  "|"  |  ^  |   \&   | == | !=  | <<  |  >> |  <= |  < |  >= |  > |  \+  |  \-   |  \*  |  /  | /%  |
+**We can use**
 
+>Arithmetic operators:
+
+| Opername |PLUS | MINUS | MULT | DIV | MOD |
+|----------|-----|-------|------|-----|-----|
+|  Symbol  | \+  |  \-   |  \*  |  /  | /%  |
+
+>Assignment operator:
+
+| Opername | ASSIGN |
+|----------|--------|
+|  Symbol  |   :=   |
+
+>Bitwise operators:
+
+| Opername | XOR | BITAND | SHL | SHR |
+|----------|-----|--------|-----|-----|
+|  Symbol  |  ^  |    &   | <<  |  >> |
+
+>Logical operators:
+
+| Opername | OR | AND | EQ | NEQ | LEQ | LT | GEQ | GT | 
+|----------|----|-----|----|-----|-----|----|-----|----|
+|  Symbol  | or | and | == | !=  |<= |  < |  >= |  > | 
+
+>Jump operator:
+
+| Opername | GOTO |
+|----------|------|
+|  Symbol  | goto |
+
+>Conditional operator:
+
+| Opername | IF | THEN | ELSE | ENDIF |
+|----------|----|------|------|-------|
+|  Symbol  | if | then | else | endif |
+
+>`While` cycle:
+
+|   Name   | WHILE | THEN | ENDWHILE | 
+|----------|-------|------|----------|
+|  Symbol  | while | then | endwhile |
 
