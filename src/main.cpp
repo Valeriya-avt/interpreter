@@ -58,10 +58,6 @@ int main(int argc, char **argv) {
 		for (auto it = variablesMap.begin(); it != variablesMap.end(); ++it)
 			cout << (*it).first << " = " << (*it).second << " | ";
 		cout << "\n\n";
-		// cout << "Labels: ";
-		// for (auto it = labelsMap.begin(); it != labelsMap.end(); ++it)
-		// 	cout << (*it).first << " = " << (*it).second << " | ";
-		// cout << "\n\n";
 	}
 	for (int i = 0; i < infixLines.size(); i++) {          
 		deleteVector(infixLines[i]);

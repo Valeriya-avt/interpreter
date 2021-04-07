@@ -42,22 +42,6 @@ int evaluatePostfix(vector<Lexem *> &poliz, int *row) {
 				deleteVector(recycle);
 				return *row;
 			}
-			// if (poliz[i]->getType() == GOTO || poliz[i]->getType() == ELSE || 
-			// 	poliz[i]->getType() == ENDWHILE) {
-			// 	*row = poliz[i]->getRow();
-			// 	deleteVector(recycle);
-			// 	return *row;
-			// }
-			// if (poliz[i]->getType() == IF || poliz[i]->getType() == WHILE) {
-			// 	if (!(computationStack.empty()) && computationStack.top() != nullptr &&
-			// 		computationStack.top()->getValue() == 1) {
-			// 		computationStack.pop();
-			// 		*row = poliz[i]->getRow();
-			// 		deleteVector(recycle);
-			// 		return *row;
-			// 	}
-			// 	computationStack.pop();
-			// }
 			if (poliz[i]->getType() == IF || poliz[i]->getType() == WHILE) {
 					Goto *lexemgoto = (Goto *)lexemop;
 					int rvalue = computationStack.top()->getValue();

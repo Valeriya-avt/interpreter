@@ -50,13 +50,10 @@ vector<Lexem *> buildPostfix(const vector<Lexem *> &infix) {
 			}
 		}
 		if (infix[i]->getLexType() == VARIABLE) {
-			//if (infix[i + 1] && infix[i + 1]->getType == GOTO)
 			if (infix[i]->inLabelsMap())
 				joinGotoAndLabel((Variable *)infix[i], opstack);
 			else
 				postfix.push_back(infix[i]);
-			//if (variablesMap.count(infix[i]->getName()) == 0)
-			//	variablesMap[infix[i]->getName()] = infix[i]->getValue();
 		}
 	}
 	for (i = opstack.size(); i > 0; i--) {
