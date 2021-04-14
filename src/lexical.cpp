@@ -84,7 +84,7 @@ bool checkSeparators(char ch) {
 
 Array *getArray(string codeline, int pos, int &next) {
 	string subcodestring;
-	int i, oldNext, n = codeline.size();
+	int i, oldNext1 = next, oldNext2, n = codeline.size();
 	for (i = pos; checkVariable(codeline[i]) && i < n;) {
 		subcodestring.push_back(codeline[i]);
 		i++;
@@ -92,7 +92,7 @@ Array *getArray(string codeline, int pos, int &next) {
 	if (i != pos) {
 
 		next = i;
-		oldNext = next;
+		oldNext2 = next;
 		pos = next;
 		if (checkSeparators(codeline[pos])) {
 			pos++;
@@ -101,12 +101,16 @@ Array *getArray(string codeline, int pos, int &next) {
 		pos = next;
 		if ((lexem != nullptr) && (lexem->getType() == SIZE)) {
 			delete lexem;
-			next = oldNext;
+			next = oldNext2;
 			return new Array(subcodestring);
 		} else if ((lexem != nullptr) && ((lexem->getType() == LVALUE) || (lexem->getType() == RVALUE))) {
 			delete lexem;
-			next = oldNext;
+			next = oldNext2;
 			return new ArrayElement(subcodestring);
+		} else {
+			delete lexem;
+			next = oldNext1;
+			return nullptr;
 		}
 	} else {
 		return nullptr;
@@ -126,9 +130,9 @@ vector<Lexem *> parseLexem(string codeline) {
 		} 
 		lexem = getOper(codeline, pos, next, 1);
 		if (lexem != nullptr) {
-			lexem->print();
-			cout << endl;
-			cout << lexem->getLexType() << endl;
+			//lexem->print();
+			//cout << endl;
+			//cout << lexem->getLexType() << endl;
 			infix.push_back(lexem);
 			pos = next;
 			continue;

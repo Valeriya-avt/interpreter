@@ -13,10 +13,13 @@ int Lexem::getType() {return 0;}
 int Lexem::getValue(int a, int b) {return 0;}
 int Lexem::getPriority() {return 0;}
 void Lexem::print() { }
+void Lexem::printArray() { }
 string Lexem::getName() {return "";}
 void Lexem::setRow(int row) { }
 int Lexem::getRow() { }
 int Lexem::inLabelsMap() { }
+int Lexem::getIndex() { }
+void Lexem::createArray(int _size) { }
 Lexem::~Lexem() { }
 
 int Number::getValue(int a, int b) {return value;}
@@ -26,7 +29,7 @@ Number::Number(int number) {
 	this->setType(NUMBER);
 }
 
-void Number::print() {cout << "[" << value << "] ";}
+void Number::print() {cout << "NUMBER[" << value << "] ";}
 
 Oper::Oper(int index = 0) {
 	this->setType(OPER);
@@ -103,7 +106,7 @@ Variable::Variable(string str, int value) {
 	this->setType(VARIABLE);
 }
 
-void Variable::print() { cout << "[" << name << "] "; }
+void Variable::print() { cout << "Variable[" << name << "] "; }
 
 string Variable::getName() {return name;}
 
@@ -124,7 +127,7 @@ void Goto::setRow(int row) { Goto::row = row; }
 int Goto::getRow() { return row; }
 
 void Goto::print() {
-	cout << "[<row " << row << ">" << OPERTEXT[this->getType()] << "] ";
+	cout << "[GOTO<row " << row << ">" << OPERTEXT[this->getType()] << "] ";
 }
 
 ArrayElement::ArrayElement(string _name, int _index, int _data) {
@@ -138,39 +141,35 @@ int ArrayElement::getValue() {
 	return data;
 }
 
+int ArrayElement::getIndex() {
+	return index;
+}
+
 void ArrayElement::setValue(int value) {
 	data = value;
 }
 
 void ArrayElement::print() {
-	cout << "[array " << name << " element] ";
+	cout << "[element of array " << name << "] ";
 }
-
-// Array::Array(int _size, string _name) {
-// 	size = _size;
-// 	name = _name;
-// 	this->setType(ARRAY);
-// 	for (int i = 0; i < size; i++) {
-// 		ArrayElement *element = new ArrayElement(i);
-// 		data.push_back(element);
-// 	}
-// }
 
 Array::Array(string _name) {
 	name = _name;
 	this->setType(ARRAY);
 }
 
+Array::Array() {
+	this->setType(ARRAY);
+}
+
 void Array::createArray(int _size) {
 	size = _size;
+	//cout << "in createArray" << endl;
 	for (int i = 0; i < size; i++) {
+		//cout << "in createArray i = " << i << endl;
 		ArrayElement *element = new ArrayElement(name, i);
 		data.push_back(element);
 	}
-}
-
-Array::Array() {
-	this->setType(ARRAY);
 }
 
 ArrayElement *Array::getValue(int index) {
@@ -179,15 +178,19 @@ ArrayElement *Array::getValue(int index) {
 
 string ArrayElement::getName() {return name;}
 
-int ArrayElement::getIndex() {return index;}
-
 string Array::getName() {return name;}
 
 ArrayElement::~ArrayElement() {
 }
 
 void Array::print() {
-	cout << "[array " << name << "] ";
+	cout << "[array " << name << " size " << size << "] ";
+}
+
+void Array::printArray() {
+	for (int i = 0; i < size; i++) {
+		cout << name << "[" << i << "] = " << data[i]->getValue() << endl;
+	}
 }
 
 Array::~Array() {
