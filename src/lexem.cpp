@@ -1,5 +1,8 @@
 #include <iostream>
+
 #include "lexem.h"
+#include "variables.h"
+
 //#include "const.h"
 //using namespace std;
 
@@ -59,6 +62,8 @@ int Oper::getValue(int left, int right) {
 
 void Oper::print() {
 	switch (this->getType()) {
+		case LVALUE: cout << "[lvalue] "; break;
+		case RVALUE: cout << "[rvalue] "; break;
 		case IF: cout <<"[if] "; break;
 		case THEN: cout <<"[then] "; break;
 		case ELSE: cout <<"[else] "; break;
@@ -85,6 +90,11 @@ void Oper::print() {
 		case SHR: cout << "[>>] "; break;
 		case DIV: cout << "[/] "; break;
 		case MOD: cout << "[%] "; break;
+		case PRINT: cout << "[print] "; break;
+		case RET: cout << "[ret] "; break;
+		case LSQUARE: cout << "[ [ ] "; break;
+		case RSQUARE: cout << "[ ] ] "; break;
+		case SIZE: cout << "[size] "; break;
 	}
 }
 
@@ -115,4 +125,75 @@ int Goto::getRow() { return row; }
 
 void Goto::print() {
 	cout << "[<row " << row << ">" << OPERTEXT[this->getType()] << "] ";
+}
+
+ArrayElement::ArrayElement(string _name, int _index, int _data) {
+	name = _name;
+	index = _index;
+	data = _data;
+	this->setType(ARRAY_ELEMENT);
+}
+
+int ArrayElement::getValue() {
+	return data;
+}
+
+void ArrayElement::setValue(int value) {
+	data = value;
+}
+
+void ArrayElement::print() {
+	cout << "[array " << name << " element] ";
+}
+
+// Array::Array(int _size, string _name) {
+// 	size = _size;
+// 	name = _name;
+// 	this->setType(ARRAY);
+// 	for (int i = 0; i < size; i++) {
+// 		ArrayElement *element = new ArrayElement(i);
+// 		data.push_back(element);
+// 	}
+// }
+
+Array::Array(string _name) {
+	name = _name;
+	this->setType(ARRAY);
+}
+
+void Array::createArray(int _size) {
+	size = _size;
+	for (int i = 0; i < size; i++) {
+		ArrayElement *element = new ArrayElement(name, i);
+		data.push_back(element);
+	}
+}
+
+Array::Array() {
+	this->setType(ARRAY);
+}
+
+ArrayElement *Array::getValue(int index) {
+	return data[index];
+}
+
+string ArrayElement::getName() {return name;}
+
+int ArrayElement::getIndex() {return index;}
+
+string Array::getName() {return name;}
+
+ArrayElement::~ArrayElement() {
+}
+
+void Array::print() {
+	cout << "[array " << name << "] ";
+}
+
+Array::~Array() {
+	for (int i = 0; i < size; i++) {
+		if (data[i] != nullptr) {
+			delete data[i];
+		}
+	}
 }

@@ -4,12 +4,7 @@
 #include <stack>
 
 #include "lexem.h"
-
-bool checkOperator(char ch) {
-	return (ch == '+' || ch == '-' ||
-			ch == '*' || ch == '=' ||
-			ch == '(' || ch == ')');
-}
+#include "variables.h"
 
 bool checkVariable(char ch) {
 	return ((ch >= 'a' && ch <= 'z') ||
@@ -23,11 +18,27 @@ bool isGoTo(OPERATOR numOfOper) {
 			numOfOper == ENDWHILE;
 }
 
-Oper *getOper(string codeline, int pos, int &next) {
+Oper *getOper(string codeline, int pos, int &next, int inParse) {
 	for (int op = 0; op < OP_NUM; op++) {
 		string subcodeline = codeline.substr(pos, OPERTEXT[op].size());
 		if (OPERTEXT[op] == subcodeline) {
 			next = pos + OPERTEXT[op].size();
+			if ((OPERATOR)op == ASSIGN) {
+				BEFORE_ASSIGN = false;
+			}
+			if ((OPERATOR)op == RSQUARE) {
+				break;
+			}
+			if ((OPERATOR)op == LSQUARE) {
+				if (BEFORE_ASSIGN == true && LVALUE_FOUND == false) {
+					if (inParse)
+						LVALUE_FOUND = true;
+					return new Oper(LVALUE);
+				}
+				else {
+					return new Oper(RVALUE);
+				}
+			}
 			if (isGoTo((OPERATOR)op))
 				return new Goto(op);
 			else
@@ -56,7 +67,7 @@ Variable *getVariable(string codeline, int pos, int &next) {
 	string subcodestring;
 	int i, n = codeline.size();
 	for (i = pos; checkVariable(codeline[i]) && i < n;) {
-		subcodestring.insert(subcodestring.size(), 1, codeline[i]);
+		subcodestring.push_back(codeline[i]);
 		i++;
 	}
 	if (i != pos) {
@@ -71,27 +82,76 @@ bool checkSeparators(char ch) {
 	return ch == ' ' || ch == '\t' || ch == '\n';
 }
 
+Array *getArray(string codeline, int pos, int &next) {
+	string subcodestring;
+	int i, oldNext, n = codeline.size();
+	for (i = pos; checkVariable(codeline[i]) && i < n;) {
+		subcodestring.push_back(codeline[i]);
+		i++;
+	}
+	if (i != pos) {
+
+		next = i;
+		oldNext = next;
+		pos = next;
+		if (checkSeparators(codeline[pos])) {
+			pos++;
+		}
+		Lexem *lexem = getOper(codeline, pos, next, 0);
+		pos = next;
+		if ((lexem != nullptr) && (lexem->getType() == SIZE)) {
+			delete lexem;
+			next = oldNext;
+			return new Array(subcodestring);
+		} else if ((lexem != nullptr) && ((lexem->getType() == LVALUE) || (lexem->getType() == RVALUE))) {
+			delete lexem;
+			next = oldNext;
+			return new ArrayElement(subcodestring);
+		}
+	} else {
+		return nullptr;
+	}
+}
+
 vector<Lexem *> parseLexem(string codeline) {
 	vector<Lexem *> infix;
 	Lexem *lexem;
-	int pos, next = 0;
+	int pos, next = 0, next1 = 0;
+	BEFORE_ASSIGN = true;
+	LVALUE_FOUND = false;
 	for (pos = 0; pos < codeline.size();) {
 		if (checkSeparators(codeline[pos])) {
 			pos++;
 			continue;
 		} 
-		lexem = getOper(codeline, pos, next);
+		lexem = getOper(codeline, pos, next, 1);
 		if (lexem != nullptr) {
+			lexem->print();
+			cout << endl;
+			cout << lexem->getLexType() << endl;
 			infix.push_back(lexem);
 			pos = next;
 			continue;
 		}
 		lexem = getNumber(codeline, pos, next);
-		if (lexem != nullptr)
+		if (lexem != nullptr) {
 			infix.push_back(lexem);
+			pos = next;
+			continue;
+		}
+		lexem = getArray(codeline, pos, next);
+
+		if (lexem != nullptr) {
+			infix.push_back(lexem);
+			pos = next;
+			continue;
+		}
 		lexem = getVariable(codeline, pos, next);
-		if (lexem != nullptr)
+		if (lexem != nullptr) {
 			infix.push_back(lexem);
+			pos = next;
+			continue;
+		}
 		pos = next;
 	}
 	return infix;
@@ -99,14 +159,15 @@ vector<Lexem *> parseLexem(string codeline) {
 
 void initLabels(vector<Lexem *> &infix, int row) {
 	for (int i = 1; i < infix.size(); i++) {
-		if (infix[i - 1]->getLexType() == VARIABLE && infix[i]->getLexType() == OPER) {
+		if ((infix[i - 1] != nullptr) && (infix[i] != nullptr) &&
+			(infix[i - 1]->getLexType() == VARIABLE) && (infix[i]->getLexType() == OPER)) {
 			Variable *lexemvar = (Variable *)infix[i - 1];
 			Oper *lexemop = (Oper *)infix[i];
 			if (lexemop->getType() == COLON) {
 				labelsMap[lexemvar->getName()] = row;
 				delete infix[i - 1];
 				delete infix[i];
-				infix[i - 1] = nullptr;
+				infix[i - 1] = nullptr; 
 				infix[i] = nullptr;
 				i++;
 			}

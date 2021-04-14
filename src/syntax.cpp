@@ -5,6 +5,7 @@
 #include <map>
 
 #include "lexem.h"
+#include "variables.h"
 
 bool checkBuild(int type, int prevPriority, int currentPriority) {
 	return ((type == ASSIGN && prevPriority > currentPriority) || 
@@ -26,7 +27,7 @@ vector<Lexem *> buildPostfix(const vector<Lexem *> &infix) {
 		if (infix[i] == nullptr) {
 			continue;
 		}
-		if (infix[i]->getLexType() == NUMBER) {
+		if (infix[i]->getLexType() == NUMBER || infix[i]->getLexType() == ARRAY || infix[i]->getLexType() == ARRAY_ELEMENT) {
 			postfix.push_back(infix[i]);
 		}
 		if (infix[i]->getLexType() == OPER) {
