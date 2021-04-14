@@ -1,9 +1,11 @@
 vector<Lexem *> parseLexem(string codeline);
-bool checkOperator(char ch);
 bool checkVariable(char ch);
-Oper *getOper(string codeline, int pos, int &next);
+//Oper *getOper(string codeline, int pos, int &next);
+Oper *getOper(string codeline, int pos, int &next, int inParse);
 Number *getNumber(string codeline, int pos, int &next);
 Variable *getVariable(string codeline, int pos, int &next);
+Array *getArray(string codeline, int pos, int &next);
+ArrayElement *getArrayElement(string codeline, int pos, int &next);
 bool checkSeparators(char ch);
 bool isGoTo(OPERATOR numOfOper);
 void initLabels(vector<Lexem *> &infix, int row);
