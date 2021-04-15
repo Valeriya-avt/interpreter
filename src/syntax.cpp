@@ -8,8 +8,8 @@
 #include "variables.h"
 
 bool checkBuild(int type, int prevPriority, int currentPriority) {
-	return ((type == ASSIGN && prevPriority > currentPriority) || 
-			(type != ASSIGN && prevPriority >= currentPriority));
+	return (((type == ASSIGN || type == RVALUE || type == LVALUE) && prevPriority > currentPriority) || 
+			(type != ASSIGN && type != RVALUE && type != LVALUE && prevPriority >= currentPriority));
 }
 
 void joinGotoAndLabel(Variable *lexemvar, stack<Oper *> &opstack) {

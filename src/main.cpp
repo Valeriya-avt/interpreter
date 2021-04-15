@@ -51,8 +51,6 @@ int main(int argc, char **argv) {
 		for (int j = 0; j < postfixLines[row].size(); j++) {
 			if (postfixLines[row][j])
 				postfixLines[row][j]->print();
-			else
-				cout << "NULLPTR\n";                         
 		}
 		cout << endl;
 	//}  
@@ -60,19 +58,21 @@ int main(int argc, char **argv) {
 		cout << "Variables: ";     
 		for (auto it = variablesMap.begin(); it != variablesMap.end(); ++it)
 			cout << (*it).first << " = " << (*it).second << " | ";
-		cout << "\n\n";    
+		cout << "\n\n";
 		cout << "Labels: ";     
 		for (auto it = labelsMap.begin(); it != labelsMap.end(); ++it)
 			cout << (*it).first << " = " << (*it).second << " | ";
-		cout << "Arrays:\n";     
-		for (auto it = arraysMap.begin(); it != arraysMap.end(); ++it)
+		cout << "Arrays:\n";
+		for (auto it = arraysMap.begin(); it != arraysMap.end(); ++it) {
 			(*it).second->printArray();
+			cout << endl;
+		}
 	 }
 	// for (int i = infixLines.size() - 1; i >= 0; i--) {          
 	// 	deleteVector(infixLines[i]);          
 	// }
 	 for (int i = 0; i < infixLines.size(); i++) {          
-		deleteVector(infixLines[i]);     
+		deleteVector(infixLines[i]);                                                    
 	}
 	//for (auto it = arraysMap.begin(); it != arraysMap.end(); ++it) 
 	//	(*it).second->~Array();
