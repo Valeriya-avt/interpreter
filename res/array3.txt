@@ -1,0 +1,9 @@
+a size 5
+b size 9
+c size 4
+x := 4
+c[1] := 4
+c[3] := 5
+b[0] := c[3] + c[1]
+a[b[c[1]]] := b[0] - x
+ret
