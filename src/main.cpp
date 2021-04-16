@@ -53,21 +53,31 @@ int main(int argc, char **argv) {
 				postfixLines[row][j]->print();
 		}
 		cout << endl;
+		row++; 
+	}  
+	row = 0;
+	while (0 <= row && row < postfixLines.size()) {
+		cout << row << ": ";   
+		for (int j = 0; j < postfixLines[row].size(); j++) {
+			if (postfixLines[row][j])
+				postfixLines[row][j]->print();
+		}
+		cout << endl;
 	//}  
 	 	value = evaluatePostfix(postfixLines[row], &row);                    
 		cout << "Variables: ";     
 		for (auto it = variablesMap.begin(); it != variablesMap.end(); ++it)
 			cout << (*it).first << " = " << (*it).second << " | ";
-		cout << "\n\n";
+		cout << "\n\n";      
 		cout << "Labels: ";     
 		for (auto it = labelsMap.begin(); it != labelsMap.end(); ++it)
 			cout << (*it).first << " = " << (*it).second << " | ";
-		cout << "Arrays:\n";
+		cout << "Arrays:\n";     
+	 }
 		for (auto it = arraysMap.begin(); it != arraysMap.end(); ++it) {
 			(*it).second->printArray();
 			cout << endl;
 		}
-	 }
 	// for (int i = infixLines.size() - 1; i >= 0; i--) {          
 	// 	deleteVector(infixLines[i]);          
 	// }

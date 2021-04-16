@@ -172,8 +172,8 @@ void Array::createArray(int _size) {
 	}
 }
 
-ArrayElement *Array::getValue(int index) {
-	return data[index];
+ArrayElement *Array::getValue(int _index) {
+	return data[_index];
 }
 
 string ArrayElement::getName() {return name;}

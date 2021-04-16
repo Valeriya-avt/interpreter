@@ -26,9 +26,9 @@ Oper *getOper(string codeline, int pos, int &next, int inParse) {
 			if ((OPERATOR)op == ASSIGN) {
 				BEFORE_ASSIGN = false;
 			}
-			if ((OPERATOR)op == RSQUARE) {
-				break;
-			}
+			// if ((OPERATOR)op == RSQUARE) {
+			// 	break;
+			// }
 			if ((OPERATOR)op == LSQUARE) {
 				if (BEFORE_ASSIGN == true && LVALUE_FOUND == false) {
 					if (inParse)
@@ -130,9 +130,6 @@ vector<Lexem *> parseLexem(string codeline) {
 		} 
 		lexem = getOper(codeline, pos, next, 1);
 		if (lexem != nullptr) {
-			//lexem->print();
-			//cout << endl;
-			//cout << lexem->getLexType() << endl;
 			infix.push_back(lexem);
 			pos = next;
 			continue;

@@ -49,19 +49,10 @@ int evaluatePostfix(vector<Lexem *> &poliz, int *row) {
 	stack<Lexem *> computationStack;
 	vector <Lexem *> recycle;
 	for (int i = 0; i < poliz.size(); i++) {
-		cout << "i = " << i << endl;
 		if (poliz[i]->getLexType() == NUMBER || poliz[i]->getLexType() == VARIABLE || 
 			poliz[i]->getLexType() == ARRAY || poliz[i]->getLexType() == ARRAY_ELEMENT) {
-			cout << "ARRAY_ELEMENT1\n";
-			if (poliz[i] == nullptr)
-				cout << "NULLPTR\n";
-			else
-				cout << poliz[i]->getValue() << endl;
-			//poliz[i]->print();
 			computationStack.push(poliz[i]);
-			cout << "ARRAY_ELEMENT2\n";
 			continue;
-			//poliz[i]->print();
 		}
 		if (poliz[i]->getLexType() == OPER) {
 			Oper *lexemop = (Oper *)poliz[i];
@@ -85,7 +76,6 @@ int evaluatePostfix(vector<Lexem *> &poliz, int *row) {
 						return *row;
 					}
 			}
-
 			if (poliz[i]->getType() == SIZE) {
 				int size = computationStack.top()->getValue();
 				cout << "size = " << size << endl;
@@ -101,40 +91,42 @@ int evaluatePostfix(vector<Lexem *> &poliz, int *row) {
 				break;
 			}
 			if (poliz[i]->getType() == PRINT) {
-				cout << variablesMap[poliz[i - 1]->getName()] << " ";
+				if (poliz[i - 1]->getLexType() == VARIABLE)
+					cout << "PRINT " << variablesMap[poliz[i - 1]->getName()] << " ";
+				else if (poliz[i - 3]->getLexType() == ARRAY_ELEMENT) {
+					int index;
+					if (poliz[i - 2]->getLexType() == VARIABLE)
+						index = variablesMap[poliz[i - 2]->getName()];
+					else
+						index = poliz[i - 2]->getValue(); 
+					cout << "PRINT " << arraysMap[poliz[i - 3]->getName()]->getValue(index)->getValue() << " ";
+				}
 				continue;
 			}
-
-			if (poliz[i]->getType() == LVALUE) {
-				cout << "LVALUE\n";
-				int index = computationStack.top()->getValue();
+			if (poliz[i]->getType() == LVALUE || poliz[i]->getType() == RVALUE) {
+				int index;
+				if (computationStack.top()->getLexType() == VARIABLE)
+					index = variablesMap[computationStack.top()->getName()];
+				else
+					index = computationStack.top()->getValue();
 				computationStack.pop();
 				string name = computationStack.top()->getName();
 				computationStack.pop();
-				ArrayElement *element = arraysMap[name]->getValue(index);
-				computationStack.push(element);
+				if (poliz[i]->getType() == LVALUE) {
+					ArrayElement *element = arraysMap[name]->getValue(index);
+					computationStack.push(element);
+				} else {
+					int number = arraysMap[name]->getValue(index)->getValue();
+					Number *num = new Number(number);
+					recycle.push_back(num);
+					computationStack.push(num);
+				}
 				continue;
 			}
-
-			if (poliz[i]->getType() == RVALUE) {
-				cout << "RVALUE\n";
-				int index = computationStack.top()->getValue();
-				computationStack.pop();
-				string name = computationStack.top()->getName();
-				computationStack.pop();
-				int number = arraysMap[name]->getValue(index)->getValue();
-				Number *num = new Number(number);
-				recycle.push_back(num);
-				computationStack.push(num);
-				continue;
-			}
-
 			right = checkForEvaluate(poliz, computationStack);
 			left = checkForEvaluate(poliz, computationStack);
-			//if (right != nullptr)
-				recycle.push_back(right);
-			//if (left != nullptr)
-				recycle.push_back(left);
+			recycle.push_back(right);
+			recycle.push_back(left);
 			if (right != nullptr && right->getLexType() == VARIABLE) {
 				right = new Number(variablesMap[right->getName()]);
 				recycle.push_back(right);

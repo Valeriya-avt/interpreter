@@ -8,8 +8,8 @@
 #include "variables.h"
 
 bool checkBuild(int type, int prevPriority, int currentPriority) {
-	return (((type == ASSIGN || type == RVALUE || type == LVALUE) && prevPriority > currentPriority) || 
-			(type != ASSIGN && type != RVALUE && type != LVALUE && prevPriority >= currentPriority));
+	return (((type == ASSIGN) && prevPriority > currentPriority) || 
+			(type != ASSIGN && type != LVALUE && type != RVALUE && prevPriority >= currentPriority));
 }
 
 void joinGotoAndLabel(Variable *lexemvar, stack<Oper *> &opstack) {
@@ -24,26 +24,35 @@ vector<Lexem *> buildPostfix(const vector<Lexem *> &infix) {
 	stack<Oper *> opstack;
 	vector<Lexem *> postfix;
 	for (i = 0; i < infix.size(); i++) {
+		cout << "i = " << i << endl;
 		if (infix[i] == nullptr) {
 			continue;
 		}
 		if (infix[i]->getLexType() == NUMBER || infix[i]->getLexType() == ARRAY || infix[i]->getLexType() == ARRAY_ELEMENT) {
 			postfix.push_back(infix[i]);
+			continue;
 		}
 		if (infix[i]->getLexType() == OPER) {
 			if (infix[i]->getType() == ENDIF || infix[i]->getType() == THEN)
 				continue;
 			if (infix[i]->getType() == LBRACKET) {
 				opstack.push((Oper *)infix[i]);
-			} else if (infix[i]->getType() == RBRACKET) {
-				for (j = opstack.size(); j > 0 && opstack.top()->getType() != LBRACKET; j--) {
+			} else if (infix[i]->getType() == RBRACKET || infix[i]->getType() == RSQUARE) {
+				for (j = opstack.size(); j > 0 && !opstack.empty() && opstack.top()->getType() != LBRACKET; j--) {
+					int type = opstack.top()->getType();
 					postfix.push_back(opstack.top());
 					opstack.pop();
+					if (type == LVALUE || type == RVALUE) {
+						cout << "IT'S BREAK 1\n";
+						break;
+					}
 				}
-				opstack.pop();
+				if (!opstack.empty() && opstack.top()->getType() == LBRACKET)
+					opstack.pop();
 			} else {
 				while (!opstack.empty() && checkBuild(infix[i]->getType(), 
 					    opstack.top()->getPriority(), infix[i]->getPriority())) {
+					int type = opstack.top()->getType();
 					postfix.push_back(opstack.top());
 					opstack.pop();
 				}
