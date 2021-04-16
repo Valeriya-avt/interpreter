@@ -1,0 +1,8 @@
+a size 5
+i := 0
+n := 5
+while i < n then
+    a[i] := i
+    i := i + 1
+endwhile
+ret
