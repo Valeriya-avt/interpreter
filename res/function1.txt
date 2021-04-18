@@ -1,0 +1,10 @@
+function A
+x := 5
+endfunction
+
+function main
+x := 1
+y := 3
+A
+x := 7
+ret

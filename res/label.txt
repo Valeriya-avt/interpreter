@@ -5,3 +5,4 @@ goto L
 x := 2
 L: 
 x := 3
+ret
