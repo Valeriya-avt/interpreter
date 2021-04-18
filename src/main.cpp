@@ -54,7 +54,9 @@ int main(int argc, char **argv) {
 		}
 		cout << endl;
 		row++; 
-	}  
+	}
+	Space space;
+	locals.push(space);
 	row = functionsMap["main"];
 	while (0 <= row && row < postfixLines.size()) {
 		cout << row << ": ";   
@@ -62,22 +64,26 @@ int main(int argc, char **argv) {
 			if (postfixLines[row][j])
 				postfixLines[row][j]->print();
 		}
-		cout << endl;         
+		cout << endl;           
 	//}  
 	 	row = evaluatePostfix(postfixLines[row], row);                           
-		cout << "Variables: ";     
-		for (auto it = variablesMap.begin(); it != variablesMap.end(); ++it)
-			cout << (*it).first << " = " << (*it).second << " | ";
-		cout << "\n\n";            
-		cout << "Labels: ";     
-		for (auto it = labelsMap.begin(); it != labelsMap.end(); ++it)
-			cout << (*it).first << " = " << (*it).second << " | ";
-		cout << "Arrays:\n";     
-	 }
-		for (auto it = arraysMap.begin(); it != arraysMap.end(); ++it) {
-			(*it).second->printArray();
-			cout << endl;
+		cout << "Variables: ";
+		if (!locals.empty()) {
+			for (auto it = locals.top().variablesMap.begin(); it != locals.top().variablesMap.end(); ++it) {
+				cout << (*it).first << " = " << (*it).second << " | ";
+			}
+			cout << "\n\n";            
+			cout << "Labels: ";     
+			for (auto it = labelsMap.begin(); it != labelsMap.end(); ++it) {
+				cout << (*it).first << " = " << (*it).second << " | ";
+			}
 		}
+	 }
+	cout << "Arrays:\n";  
+		// for (auto it = locals.top().arraysMap.begin(); it != locals.top(). arraysMap.end(); ++it) {
+		// 	(*it).second->printArray();
+		// 	cout << endl;
+		// }
 	// for (int i = infixLines.size() - 1; i >= 0; i--) {          
 	// 	deleteVector(infixLines[i]);          
 	// }
