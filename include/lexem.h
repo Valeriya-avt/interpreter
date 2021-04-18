@@ -3,6 +3,8 @@
 
 #include "const.h"
 #include <vector>
+#include <map>
+#include <string>
 
 using namespace std;
 
@@ -22,6 +24,7 @@ public:
 	virtual int getRow();
 	virtual int getIndex();
 	virtual int inLabelsMap();
+	virtual int inFunctionsMap();
 	virtual void createArray(int _size);
 	virtual ~Lexem();
 };
@@ -61,6 +64,7 @@ public:
 	void print();
 	string getName();
 	int inLabelsMap();
+	int inFunctionsMap();
 };
 
 class ArrayElement;
@@ -92,6 +96,12 @@ public:
 	string getName();
 	void print();
 	~ArrayElement();
+};
+
+struct Space {
+	map<string, int> variablesMap;
+	map<string, Array *> arraysMap;
+	stack<Lexem *> computationStack;
 };
 
 #endif

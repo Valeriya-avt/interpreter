@@ -4,6 +4,7 @@
 #include <string>
 #include <map>
 #include <iostream>
+#include <stack>
 
 //#include "lexem.h"
 
@@ -32,15 +33,15 @@ enum OPERATOR {
 	LEQ, LT, GEQ, GT,
 	PLUS, MINUS,
 	MULT, DIV, MOD,
-	PRINT, RET
+	PRINT, RET,
+	FUNCTION, ENDFUNCTION
 };
 
 extern int PRIORITY[];
 extern std::string OPERTEXT[];
 extern int OP_NUM;
-// extern std::map<std::string, int> variablesMap;
 extern std::map<std::string, int> labelsMap;
-// extern std::map<std::string, Array> arraysMap;
-// extern bool BEFORE_ASSIGN, LVALUE_FOUND;
+extern std::map<std::string, int> functionsMap;
+extern std::stack<int> returnAddresses;
 
 //#endif
