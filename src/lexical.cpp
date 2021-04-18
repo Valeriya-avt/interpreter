@@ -15,7 +15,8 @@ bool checkVariable(char ch) {
 bool isGoTo(OPERATOR numOfOper) {
 	return  numOfOper == GOTO || numOfOper == IF ||
 			numOfOper == ELSE || numOfOper == WHILE ||
-			numOfOper == ENDWHILE;
+			numOfOper == ENDWHILE || numOfOper == FUNCTION ||
+			numOfOper == ENDFUNCTION; //
 }
 
 Oper *getOper(string codeline, int pos, int &next, int inParse) {
@@ -172,7 +173,15 @@ void initLabels(vector<Lexem *> &infix, int row) {
 				infix[i] = nullptr;
 				i++;
 			}
-		}
+		// } else if ((infix[i] != nullptr) && (infix[i]->getLexType() == VARIABLE)) { //
+		// 	Variable *lexemvar = (Variable *)infix[i];
+		// 	if (lexemop->getType() == FUNCTION) {
+		// 		labelsMap[lexemvar->getName()] = row;
+		// 		delete infix[i];
+		// 		infix[i] = nullptr;
+		// 		i++;
+		// 	}
+		 } //
 	}
 }
 
@@ -207,6 +216,10 @@ void initJumps(vector<vector<Lexem *>> &infixes) {
 					stackWhile.pop();
 					labelsMap[OPERTEXT[infixes[row][i]->getType()]] = row + 1;
 				}
+				if (infixes[row][i]->getType() == FUNCTION) { //
+					infixes[row][i]->setRow(row + 1);
+					functionsMap[infixes[row][i + 1]->getName()] = row + 1; 
+				} //
 			}
 		}
 	}

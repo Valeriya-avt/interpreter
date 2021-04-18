@@ -18,6 +18,7 @@ string Lexem::getName() {return "";}
 void Lexem::setRow(int row) { }
 int Lexem::getRow() { }
 int Lexem::inLabelsMap() { }
+int Lexem::inFunctionsMap() { }
 int Lexem::getIndex() { }
 void Lexem::createArray(int _size) { }
 Lexem::~Lexem() { }
@@ -113,6 +114,14 @@ string Variable::getName() {return name;}
 int Variable::inLabelsMap() {
 	auto it = labelsMap.find(name);
 	if (it == labelsMap.end())
+		return 0;
+	else
+		return 1;
+}
+
+int Variable::inFunctionsMap() {
+	auto it = functionsMap.find(name);
+	if (it == functionsMap.end())
 		return 0;
 	else
 		return 1;

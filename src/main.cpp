@@ -55,20 +55,20 @@ int main(int argc, char **argv) {
 		cout << endl;
 		row++; 
 	}  
-	row = 0;
+	row = functionsMap["main"];
 	while (0 <= row && row < postfixLines.size()) {
 		cout << row << ": ";   
 		for (int j = 0; j < postfixLines[row].size(); j++) {
 			if (postfixLines[row][j])
 				postfixLines[row][j]->print();
 		}
-		cout << endl;
+		cout << endl;         
 	//}  
-	 	value = evaluatePostfix(postfixLines[row], &row);                    
+	 	row = evaluatePostfix(postfixLines[row], row);                           
 		cout << "Variables: ";     
 		for (auto it = variablesMap.begin(); it != variablesMap.end(); ++it)
 			cout << (*it).first << " = " << (*it).second << " | ";
-		cout << "\n\n";      
+		cout << "\n\n";            
 		cout << "Labels: ";     
 		for (auto it = labelsMap.begin(); it != labelsMap.end(); ++it)
 			cout << (*it).first << " = " << (*it).second << " | ";

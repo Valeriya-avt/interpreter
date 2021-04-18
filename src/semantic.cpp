@@ -43,8 +43,7 @@ void deleteVector(vector<Lexem *> &vectorOfLexemes) {
 	}
 }
 
-int evaluatePostfix(vector<Lexem *> &poliz, int *row) {
-	int value;
+int evaluatePostfix(vector<Lexem *> &poliz, int row) {
 	Lexem *left, *right;
 	stack<Lexem *> computationStack;
 	vector <Lexem *> recycle;
@@ -52,16 +51,24 @@ int evaluatePostfix(vector<Lexem *> &poliz, int *row) {
 		if (poliz[i]->getLexType() == NUMBER || poliz[i]->getLexType() == VARIABLE || 
 			poliz[i]->getLexType() == ARRAY || poliz[i]->getLexType() == ARRAY_ELEMENT) {
 			computationStack.push(poliz[i]);
+			if (poliz[i]->getLexType() == VARIABLE && poliz[i]->inFunctionsMap()) {
+				returnAddresses.push(row + 1);
+				return functionsMap[poliz[i]->getName()];
+			}
 			continue;
 		}
 		if (poliz[i]->getLexType() == OPER) {
 			Oper *lexemop = (Oper *)poliz[i];
+			if (lexemop->getType() == ENDFUNCTION) {
+				int rowNumber = returnAddresses.top();
+				returnAddresses.pop();
+				return rowNumber;
+			}
 			if (lexemop->getType() == GOTO || lexemop->getType() == ELSE || 
 				lexemop->getType() == ENDWHILE) {
 				Goto *lexemgoto = (Goto *)lexemop;
-				*row = lexemgoto->getRow();
 				deleteVector(recycle);
-				return *row;
+				return lexemgoto->getRow();
 			}
 			if (poliz[i]->getType() == IF || poliz[i]->getType() == WHILE) {
 					Goto *lexemgoto = (Goto *)lexemop;
@@ -69,11 +76,9 @@ int evaluatePostfix(vector<Lexem *> &poliz, int *row) {
 					computationStack.pop();
 					deleteVector(recycle);
 					if (!rvalue) {
-						*row = lexemgoto->getRow();
-						return *row;
+						return lexemgoto->getRow();
 					} else {
-						*row = *row + 1;
-						return *row;
+						return row + 1;
 					}
 			}
 			if (poliz[i]->getType() == SIZE) {
@@ -157,7 +162,7 @@ int evaluatePostfix(vector<Lexem *> &poliz, int *row) {
 				recycle.push_back(left);
 			}
 			if (right != nullptr && left != nullptr) {
-				value = poliz[i]->getValue(left->getValue(), right->getValue());
+				int value = poliz[i]->getValue(left->getValue(), right->getValue());
 				Number *num = new Number(value);
 				computationStack.push(num);
 				recycle.push_back(num);
@@ -165,6 +170,5 @@ int evaluatePostfix(vector<Lexem *> &poliz, int *row) {
 		}
 	}
 	deleteVector(recycle);
-	*row = *row + 1;
-	return value;
+	return row + 1;
 }
