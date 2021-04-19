@@ -43,5 +43,6 @@ extern int OP_NUM;
 extern std::map<std::string, int> labelsMap;
 extern std::map<std::string, int> functionsMap;
 extern std::stack<int> returnAddresses;
+extern std::stack<int> returnIndex;
 
 //#endif
