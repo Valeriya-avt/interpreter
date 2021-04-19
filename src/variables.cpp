@@ -8,3 +8,6 @@
 bool BEFORE_ASSIGN, LVALUE_FOUND;
 Space globalVariables;
 std::stack<Space> locals;
+std::stack<Space> prevLocals;
+vector<Lexem *> recycle;
+stack<Lexem *> arguments;

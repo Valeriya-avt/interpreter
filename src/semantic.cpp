@@ -39,58 +39,94 @@ Lexem *checkForEvaluate(vector<Lexem *> &poliz, stack<Lexem *> &computationStack
 
 void deleteVector(vector<Lexem *> &vectorOfLexemes) {
 	for (int i = 0; i < vectorOfLexemes.size(); ++i) {
-			delete vectorOfLexemes[i];
+		delete vectorOfLexemes[i];
 	}
 }
 
-int evaluatePostfix(vector<Lexem *> &poliz, int row) {
+void clearStack(stack <Lexem *> &stackOfLexemes) {
+	for (int i = 0; i < stackOfLexemes.size(); i++)
+		stackOfLexemes.pop();
+}
+
+int evaluatePostfix(vector<Lexem *> &poliz, int row, int *index) {
+	int i, j;
 	Lexem *left, *right;
-//	stack<Lexem *> computationStack;
-	vector <Lexem *> recycle;
-	for (int i = 0; i < poliz.size(); i++) {
+	Space prevSpace = locals.top();
+	for (i = *index; i < poliz.size(); i++) {
 		if (poliz[i]->getLexType() == NUMBER || poliz[i]->getLexType() == VARIABLE || 
 			poliz[i]->getLexType() == ARRAY || poliz[i]->getLexType() == ARRAY_ELEMENT) {
 			locals.top().computationStack.push(poliz[i]);
 			if (poliz[i]->getLexType() == VARIABLE && poliz[i]->inFunctionsMap()) {
-				Space space;
-				locals.push(space);
-				returnAddresses.push(row + 1);
-				return functionsMap[poliz[i]->getName()];
+				if (poliz[poliz.size() - 1]->getLexType() == OPER && poliz[poliz.size() - 1]->getType() == FUNCTION) {
+					prevLocals.push(prevSpace);
+					Space space;
+					prevLocals.top().computationStack.pop();
+					for (j = i - 1; j >= 0; j--) {
+						if (prevLocals.top().computationStack.top()->getLexType() == NUMBER)
+							space.variablesMap[poliz[j]->getName()] = prevLocals.top().computationStack.top()->getValue();
+						if (prevLocals.top().computationStack.top()->getLexType() == VARIABLE)
+							space.variablesMap[poliz[j]->getName()] = prevLocals.top().variablesMap[prevLocals.top().computationStack.top()->getName()];
+						prevLocals.top().computationStack.pop();
+					}
+					locals.push(space);
+					clearStack(locals.top().computationStack);
+					*index = 0;
+					return functionsMap[poliz[i]->getName()];
+				}
+				returnIndex.push(i + 1);
+				returnAddresses.push(row); //
+				*index = 0;
+				return functionsMap[poliz[i]->getName()] - 1;
 			}
 			continue;
 		}
 		if (poliz[i]->getLexType() == OPER) {
 			Oper *lexemop = (Oper *)poliz[i];
-			// if (lexemop->getType() == FUNCTION) {
-			// 	Space space;
-			// 	locals.push(space);
-			// }
 			if (lexemop->getType() == ENDFUNCTION) {
 				int rowNumber = returnAddresses.top();
 				returnAddresses.pop();
+				if (i != 0) {
+					if (locals.top().computationStack.top()->getLexType() == VARIABLE) {
+						int value = locals.top().variablesMap[locals.top().computationStack.top()->getName()];
+						Number *num = new Number(value);
+						recycle.push_back(num);
+						prevLocals.top().computationStack.push(num);
+					}
+					if (locals.top().computationStack.top()->getLexType() == NUMBER) {
+						prevLocals.top().computationStack.push(locals.top().computationStack.top());
+					}
+				}
 				locals.pop();
+				locals.pop();
+				locals.push(prevLocals.top());
+				prevLocals.pop();
+				*index = returnIndex.top();
+				returnIndex.pop();
 				return rowNumber;
 			}
 			if (lexemop->getType() == GOTO || lexemop->getType() == ELSE || 
 				lexemop->getType() == ENDWHILE) {
 				Goto *lexemgoto = (Goto *)lexemop;
-				deleteVector(recycle);
+				clearStack(locals.top().computationStack);
+				*index = 0;
 				return lexemgoto->getRow();
 			}
 			if (poliz[i]->getType() == IF || poliz[i]->getType() == WHILE) {
 					Goto *lexemgoto = (Goto *)lexemop;
 					int rvalue = locals.top().computationStack.top()->getValue();
 					locals.top().computationStack.pop();
-					deleteVector(recycle);
 					if (!rvalue) {
+						clearStack(locals.top().computationStack);
+						*index = 0;
 						return lexemgoto->getRow();
 					} else {
+						clearStack(locals.top().computationStack);
+						*index = 0;
 						return row + 1;
 					}
 			}
 			if (poliz[i]->getType() == SIZE) {
 				int size = locals.top().computationStack.top()->getValue();
-				cout << "size = " << size << endl;
 				locals.top().computationStack.pop();
 				locals.top().computationStack.top()->createArray(size);
 				locals.top().arraysMap[locals.top().computationStack.top()->getName()] = (Array *)locals.top().computationStack.top();
@@ -176,6 +212,7 @@ int evaluatePostfix(vector<Lexem *> &poliz, int row) {
 			}
 		}
 	}
-	deleteVector(recycle);
+	clearStack(locals.top().computationStack);
+	*index = 0;
 	return row + 1;
 }

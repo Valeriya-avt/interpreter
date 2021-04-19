@@ -22,7 +22,7 @@ int PRIORITY[] = {
 	13, 14,
 	15, 15, 15,
 	16, 16,
-	2, 2
+	4, 4
 };
 
 std::string OPERTEXT[] = {
@@ -52,5 +52,6 @@ int OP_NUM = sizeof(OPERTEXT) / sizeof(std::string);
 std::map<std::string, int> labelsMap;
 std::map<std::string, int> functionsMap;
 std::stack<int> returnAddresses;
+std::stack<int> returnIndex;
 // std::map<std::string, Array> arraysMap;
 // bool BEFORE_ASSIGN, LVALUE_FOUND;

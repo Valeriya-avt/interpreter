@@ -22,6 +22,7 @@ void joinGotoAndLabel(Variable *lexemvar, stack<Oper *> &opstack) {
 vector<Lexem *> buildPostfix(const vector<Lexem *> &infix) {
 	int i, j;
 	stack<Oper *> opstack;
+	stack<Variable *> functionsStack;
 	vector<Lexem *> postfix;
 	for (i = 0; i < infix.size(); i++) {
 		cout << "i = " << i << endl;
@@ -43,9 +44,13 @@ vector<Lexem *> buildPostfix(const vector<Lexem *> &infix) {
 					postfix.push_back(opstack.top());
 					opstack.pop();
 					if (type == LVALUE || type == RVALUE) {
-						cout << "IT'S BREAK 1\n";
 						break;
 					}
+				}
+				if (infix[i]->getType() == RBRACKET && !functionsStack.empty()) {
+					cout << "I IN IFELSE " << functionsStack.top()->getName() << endl;
+					postfix.push_back(functionsStack.top());
+					functionsStack.pop();
 				}
 				if (!opstack.empty() && opstack.top()->getType() == LBRACKET)
 					opstack.pop();
@@ -62,8 +67,10 @@ vector<Lexem *> buildPostfix(const vector<Lexem *> &infix) {
 		if (infix[i]->getLexType() == VARIABLE) {
 			if (infix[i]->inLabelsMap())
 				joinGotoAndLabel((Variable *)infix[i], opstack);
-			else
+			else if (!infix[i]->inFunctionsMap())
 				postfix.push_back(infix[i]);
+			if (infix[i]->inFunctionsMap())
+				functionsStack.push((Variable *)infix[i]);
 		}
 	}
 	for (i = opstack.size(); i > 0; i--) {

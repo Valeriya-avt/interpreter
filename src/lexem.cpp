@@ -68,6 +68,8 @@ void Oper::print() {
 	switch (this->getType()) {
 		case LVALUE: cout << "[lvalue] "; break;
 		case RVALUE: cout << "[rvalue] "; break;
+		case LBRACKET: cout << "[ ( ] "; break;
+		case RBRACKET: cout << "[ ) ] "; break;
 		case IF: cout <<"[if] "; break;
 		case THEN: cout <<"[then] "; break;
 		case ELSE: cout <<"[else] "; break;

@@ -58,6 +58,7 @@ int main(int argc, char **argv) {
 	Space space;
 	locals.push(space);
 	row = functionsMap["main"];
+	int index = 0;
 	while (0 <= row && row < postfixLines.size()) {
 		cout << row << ": ";   
 		for (int j = 0; j < postfixLines[row].size(); j++) {
@@ -65,33 +66,28 @@ int main(int argc, char **argv) {
 				postfixLines[row][j]->print();
 		}
 		cout << endl;           
-	//}  
-	 	row = evaluatePostfix(postfixLines[row], row);                           
+	 	row = evaluatePostfix(postfixLines[row], row, &index);                               
 		cout << "Variables: ";
 		if (!locals.empty()) {
 			for (auto it = locals.top().variablesMap.begin(); it != locals.top().variablesMap.end(); ++it) {
-				cout << (*it).first << " = " << (*it).second << " | ";
+				cout << (*it).first << " = " << (*it).second << " | ";               
 			}
-			cout << "\n\n";            
-			cout << "Labels: ";     
-			for (auto it = labelsMap.begin(); it != labelsMap.end(); ++it) {
-				cout << (*it).first << " = " << (*it).second << " | ";
-			}
+			cout << "\n\n";              
+			// cout << "Labels: ";     
+			// for (auto it = labelsMap.begin(); it != labelsMap.end(); ++it) {
+			// 	cout << (*it).first << " = " << (*it).second << " | ";
+			// }
 		}
 	 }
-	cout << "Arrays:\n";  
-		// for (auto it = locals.top().arraysMap.begin(); it != locals.top(). arraysMap.end(); ++it) {
-		// 	(*it).second->printArray();
-		// 	cout << endl;
-		// }
-	// for (int i = infixLines.size() - 1; i >= 0; i--) {          
-	// 	deleteVector(infixLines[i]);          
-	// }
+	cout << "Arrays:\n";            
+	for (auto it = locals.top().arraysMap.begin(); it != locals.top(). arraysMap.end(); ++it) {
+		(*it).second->printArray();
+		cout << endl;
+	}
 	 for (int i = 0; i < infixLines.size(); i++) {          
 		deleteVector(infixLines[i]);                                                    
 	}
-	//for (auto it = arraysMap.begin(); it != arraysMap.end(); ++it) 
-	//	(*it).second->~Array();
+	deleteVector(recycle); 
 	file.close(); 
 	return 0;
 }

@@ -80,7 +80,7 @@ Variable *getVariable(string codeline, int pos, int &next) {
 }
 
 bool checkSeparators(char ch) {
-	return ch == ' ' || ch == '\t' || ch == '\n';
+	return ch == ' ' || ch == '\t' || ch == '\n' || ch == ',';
 }
 
 Array *getArray(string codeline, int pos, int &next) {
