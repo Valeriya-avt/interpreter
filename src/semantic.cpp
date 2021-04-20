@@ -23,20 +23,6 @@ Lexem *checkForEvaluate(vector<Lexem *> &poliz, stack<Lexem *> &computationStack
 	return tmp;
 }
 
-// void deleteVector(vector<Lexem *> &vectorOfLexemes) {
-// 	for (int i = vectorOfLexemes.size() - 1; i >= 0; i--) {
-// 		cout << "i = " << i << endl;
-// 		if (vectorOfLexemes[i] == nullptr)
-// 			continue;
-// 		// if (vectorOfLexemes[i]->getLexType() == ARRAY_ELEMENT) {
-// 		// 	continue;
-// 		// }
-// 		else {
-// 			delete vectorOfLexemes[i];
-// 		}
-// 	}
-// }
-
 void deleteVector(vector<Lexem *> &vectorOfLexemes) {
 	for (int i = 0; i < vectorOfLexemes.size(); ++i) {
 		delete vectorOfLexemes[i];
@@ -46,6 +32,30 @@ void deleteVector(vector<Lexem *> &vectorOfLexemes) {
 void clearStack(stack <Lexem *> &stackOfLexemes) {
 	for (int i = 0; i < stackOfLexemes.size(); i++)
 		stackOfLexemes.pop();
+}
+
+int inMap(string name, map<std::string, Array *> lexemsMap) {
+	auto it = lexemsMap.find(name);
+	if (it == lexemsMap.end())
+		return 0;
+	else
+		return 1;
+}
+
+void print(vector<Lexem *> &poliz, int index) {
+	if (poliz[index - 1]->getLexType() == VARIABLE)
+		cout << poliz[index - 1]->getName() << " = " << locals.top().variablesMap[poliz[index - 1]->getName()] << endl;
+	else if (poliz[0]->getLexType() == ARRAY_ELEMENT) {
+		int pos;
+		if (poliz[index - 2]->getLexType() == VARIABLE)
+			pos = locals.top().variablesMap[poliz[index - 2]->getName()];
+		else
+			pos = poliz[index - 2]->getValue(); 
+		cout << poliz[index - 3]->getName() << "[" << pos << "]" << " = " << locals.top().arraysMap[poliz[index - 3]->getName()]->getValue(pos)->getValue() << endl;
+		
+		//int pos = locals.top().computationStack.top()->getValue();
+		//cout << "PRINT " << poliz[0]->getName() << "[" << pos << "]" << " = " << locals.top().arraysMap[poliz[0]->getName()]->getValue(pos)->getValue() << " ";
+	}
 }
 
 int evaluatePostfix(vector<Lexem *> &poliz, int row, int *index) {
@@ -64,11 +74,12 @@ int evaluatePostfix(vector<Lexem *> &poliz, int row, int *index) {
 					for (j = i - 1; j >= 0; j--) {
 						if (prevLocals.top().computationStack.top()->getLexType() == NUMBER)
 							space.variablesMap[poliz[j]->getName()] = prevLocals.top().computationStack.top()->getValue();
-						if (prevLocals.top().computationStack.top()->getLexType() == VARIABLE)
+						if (prevLocals.top().computationStack.top()->getLexType() == VARIABLE && 
+							!inMap(prevLocals.top().computationStack.top()->getName(), prevLocals.top().arraysMap))
 							space.variablesMap[poliz[j]->getName()] = prevLocals.top().variablesMap[prevLocals.top().computationStack.top()->getName()];
-						// if (prevLocals.top().computationStack.top()->getLexType() == ARRAY_ELEMENT) {
-						// 	space.variablesMap[poliz[j]->getName()] = prevLocals.top().arraysMap[prevLocals.top().computationStack.top()->getName()]->getValue(right->getIndex())->getValue();
-						// }
+						//if (prevLocals.top().computationStack.top()->getLexType() == ARRAY_ELEMENT)
+						else if (inMap(prevLocals.top().computationStack.top()->getName(), prevLocals.top().arraysMap))
+						 	space.arraysMap[poliz[j]->getName()] = prevLocals.top().arraysMap[prevLocals.top().computationStack.top()->getName()];
 						prevLocals.top().computationStack.pop();
 					}
 					locals.push(space);
@@ -77,7 +88,7 @@ int evaluatePostfix(vector<Lexem *> &poliz, int row, int *index) {
 					return functionsMap[poliz[i]->getName()];
 				}
 				returnIndex.push(i + 1);
-				returnAddresses.push(row); //
+				returnAddresses.push(row);
 				*index = 0;
 				return functionsMap[poliz[i]->getName()] - 1;
 			}
@@ -141,25 +152,21 @@ int evaluatePostfix(vector<Lexem *> &poliz, int row, int *index) {
 				locals.top().computationStack.pop();
 				locals.top().computationStack.top()->createArray(size);
 				locals.top().arraysMap[locals.top().computationStack.top()->getName()] = (Array *)locals.top().computationStack.top();
-				locals.top().computationStack.top()->print();
 				locals.top().computationStack.pop();
 				continue;
 			}
-
-			if (poliz[i]->getType() == RET) {
-				break;
-			}
 			if (poliz[i]->getType() == PRINT) {
-				if (poliz[i - 1]->getLexType() == VARIABLE)
-					cout << "PRINT " << locals.top().variablesMap[poliz[i - 1]->getName()] << " ";
-				else if (poliz[i - 3]->getLexType() == ARRAY_ELEMENT) {
-					int index;
-					if (poliz[i - 2]->getLexType() == VARIABLE)
-						index = locals.top().variablesMap[poliz[i - 2]->getName()];
-					else
-						index = poliz[i - 2]->getValue(); 
-					cout << "PRINT " << locals.top().arraysMap[poliz[i - 3]->getName()]->getValue(index)->getValue() << " ";
-				}
+				// if (poliz[i - 1]->getLexType() == VARIABLE)
+				// 	cout << "PRINT " << locals.top().variablesMap[poliz[i - 1]->getName()] << " ";
+				// else if (poliz[i - 3]->getLexType() == ARRAY_ELEMENT) {
+				// 	int index;
+				// 	if (poliz[i - 2]->getLexType() == VARIABLE)
+				// 		index = locals.top().variablesMap[poliz[i - 2]->getName()];
+				// 	else
+				// 		index = poliz[i - 2]->getValue(); 
+				// 	cout << "PRINT " << locals.top().arraysMap[poliz[i - 3]->getName()]->getValue(index)->getValue() << " ";
+				// }
+				print(poliz, i);
 				continue;
 			}
 			if (poliz[i]->getType() == LVALUE || poliz[i]->getType() == RVALUE) {

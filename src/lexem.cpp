@@ -30,7 +30,7 @@ Number::Number(int number) {
 	this->setType(NUMBER);
 }
 
-void Number::print() {cout << "NUMBER[" << value << "] ";}
+void Number::print() {cout << "[" << value << "] ";}
 
 Oper::Oper(int index = 0) {
 	this->setType(OPER);
@@ -97,7 +97,6 @@ void Oper::print() {
 		case DIV: cout << "[/] "; break;
 		case MOD: cout << "[%] "; break;
 		case PRINT: cout << "[print] "; break;
-		case RET: cout << "[ret] "; break;
 		case LSQUARE: cout << "[ [ ] "; break;
 		case RSQUARE: cout << "[ ] ] "; break;
 		case SIZE: cout << "[size] "; break;
@@ -109,7 +108,7 @@ Variable::Variable(string str, int value) {
 	this->setType(VARIABLE);
 }
 
-void Variable::print() { cout << "Variable[" << name << "] "; }
+void Variable::print() { cout << "[" << name << "] "; }
 
 string Variable::getName() {return name;}
 

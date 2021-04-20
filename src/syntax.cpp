@@ -25,10 +25,8 @@ vector<Lexem *> buildPostfix(const vector<Lexem *> &infix) {
 	stack<Variable *> functionsStack;
 	vector<Lexem *> postfix;
 	for (i = 0; i < infix.size(); i++) {
-		cout << "i = " << i << endl;
-		if (infix[i] == nullptr) {
+		if (infix[i] == nullptr)
 			continue;
-		}
 		if (infix[i]->getLexType() == NUMBER || infix[i]->getLexType() == ARRAY || infix[i]->getLexType() == ARRAY_ELEMENT) {
 			postfix.push_back(infix[i]);
 			continue;
@@ -43,9 +41,8 @@ vector<Lexem *> buildPostfix(const vector<Lexem *> &infix) {
 					int type = opstack.top()->getType();
 					postfix.push_back(opstack.top());
 					opstack.pop();
-					if (type == LVALUE || type == RVALUE) {
+					if (type == LVALUE || type == RVALUE)
 						break;
-					}
 				}
 				if (infix[i]->getType() == RBRACKET && !functionsStack.empty()) {
 					postfix.push_back(functionsStack.top());

@@ -1,7 +1,6 @@
 #include <string>
 #include <map>
 
-//#include "lexem.h"
 #include "const.h"
 
 int PRIORITY[] = {
@@ -22,7 +21,7 @@ int PRIORITY[] = {
 	13, 14,
 	15, 15, 15,
 	16, 16,
-	4, 4
+	4
 };
 
 std::string OPERTEXT[] = {
@@ -43,15 +42,12 @@ std::string OPERTEXT[] = {
 	"+", "-",
 	"*", "/", "%",
 	"print", "return",
-	"function", "ret"
+	"function"
 };
 
 int OP_NUM = sizeof(OPERTEXT) / sizeof(std::string);
 
-// std::map<std::string, int> variablesMap;
 std::map<std::string, int> labelsMap;
 std::map<std::string, int> functionsMap;
 std::stack<int> returnAddresses;
 std::stack<int> returnIndex;
-// std::map<std::string, Array> arraysMap;
-// bool BEFORE_ASSIGN, LVALUE_FOUND;

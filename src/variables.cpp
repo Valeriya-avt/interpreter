@@ -3,9 +3,7 @@
 
 #include "lexem.h"
 
-// std::map<std::string, int> variablesMap;
-// std::map<std::string, Array *> arraysMap;
-bool BEFORE_ASSIGN, LVALUE_FOUND;
+bool BEFORE_ASSIGN, LVALUE_FOUND, IN_PARSE = true;
 Space globalVariables;
 std::stack<Space> locals;
 std::stack<Space> prevLocals;

@@ -8,28 +8,24 @@
 
 bool checkVariable(char ch) {
 	return ((ch >= 'a' && ch <= 'z') ||
-			(ch >= 'A' && ch <= 'Z') ||
-			 ch == '_');
+            (ch >= 'A' && ch <= 'Z') ||
+             ch == '_');
 }
 
 bool isGoTo(OPERATOR numOfOper) {
-	return  numOfOper == GOTO || numOfOper == IF ||
-			numOfOper == ELSE || numOfOper == WHILE ||
-			numOfOper == ENDWHILE || numOfOper == FUNCTION ||
-			numOfOper == RETURN; //
+	return numOfOper == GOTO || numOfOper == IF ||
+           numOfOper == ELSE || numOfOper == WHILE ||
+           numOfOper == ENDWHILE || numOfOper == FUNCTION ||
+           numOfOper == RETURN;
 }
 
-Oper *getOper(string codeline, int pos, int &next, int inParse) {
+Oper *getOper(string codeline, int pos, int &next, bool inParse) {
 	for (int op = 0; op < OP_NUM; op++) {
 		string subcodeline = codeline.substr(pos, OPERTEXT[op].size());
 		if (OPERTEXT[op] == subcodeline) {
 			next = pos + OPERTEXT[op].size();
-			if ((OPERATOR)op == ASSIGN) {
+			if ((OPERATOR)op == ASSIGN)
 				BEFORE_ASSIGN = false;
-			}
-			// if ((OPERATOR)op == RSQUARE) {
-			// 	break;
-			// }
 			if ((OPERATOR)op == LSQUARE) {
 				if (BEFORE_ASSIGN == true && LVALUE_FOUND == false) {
 					if (inParse)
@@ -91,14 +87,13 @@ Array *getArray(string codeline, int pos, int &next) {
 		i++;
 	}
 	if (i != pos) {
-
 		next = i;
 		oldNext2 = next;
 		pos = next;
 		if (checkSeparators(codeline[pos])) {
 			pos++;
 		}
-		Lexem *lexem = getOper(codeline, pos, next, 0);
+		Lexem *lexem = getOper(codeline, pos, next, !IN_PARSE);
 		pos = next;
 		if ((lexem != nullptr) && (lexem->getType() == SIZE)) {
 			delete lexem;
@@ -121,7 +116,7 @@ Array *getArray(string codeline, int pos, int &next) {
 vector<Lexem *> parseLexem(string codeline) {
 	vector<Lexem *> infix;
 	Lexem *lexem;
-	int pos, next = 0, next1 = 0;
+	int pos, next = 0;
 	BEFORE_ASSIGN = true;
 	LVALUE_FOUND = false;
 	for (pos = 0; pos < codeline.size();) {
@@ -129,7 +124,7 @@ vector<Lexem *> parseLexem(string codeline) {
 			pos++;
 			continue;
 		} 
-		lexem = getOper(codeline, pos, next, 1);
+		lexem = getOper(codeline, pos, next, IN_PARSE);
 		if (lexem != nullptr) {
 			infix.push_back(lexem);
 			pos = next;
@@ -142,18 +137,14 @@ vector<Lexem *> parseLexem(string codeline) {
 			continue;
 		}
 		lexem = getArray(codeline, pos, next);
-
 		if (lexem != nullptr) {
 			infix.push_back(lexem);
 			pos = next;
 			continue;
 		}
 		lexem = getVariable(codeline, pos, next);
-		if (lexem != nullptr) {
+		if (lexem != nullptr)
 			infix.push_back(lexem);
-			pos = next;
-			continue;
-		}
 		pos = next;
 	}
 	return infix;
@@ -173,15 +164,7 @@ void initLabels(vector<Lexem *> &infix, int row) {
 				infix[i] = nullptr;
 				i++;
 			}
-		// } else if ((infix[i] != nullptr) && (infix[i]->getLexType() == VARIABLE)) { //
-		// 	Variable *lexemvar = (Variable *)infix[i];
-		// 	if (lexemop->getType() == FUNCTION) {
-		// 		labelsMap[lexemvar->getName()] = row;
-		// 		delete infix[i];
-		// 		infix[i] = nullptr;
-		// 		i++;
-		// 	}
-		 } //
+		 }
 	}
 }
 
@@ -216,10 +199,10 @@ void initJumps(vector<vector<Lexem *>> &infixes) {
 					stackWhile.pop();
 					labelsMap[OPERTEXT[infixes[row][i]->getType()]] = row + 1;
 				}
-				if (infixes[row][i]->getType() == FUNCTION) { //
+				if (infixes[row][i]->getType() == FUNCTION) {
 					infixes[row][i]->setRow(row + 1);
 					functionsMap[infixes[row][i + 1]->getName()] = row + 1; 
-				} //
+				}
 			}
 		}
 	}
