@@ -1,7 +1,6 @@
 vector<Lexem *> parseLexem(string codeline);
 bool checkVariable(char ch);
-//Oper *getOper(string codeline, int pos, int &next);
-Oper *getOper(string codeline, int pos, int &next, int inParse);
+Oper *getOper(string codeline, int pos, int &next, bool inParse);
 Number *getNumber(string codeline, int pos, int &next);
 Variable *getVariable(string codeline, int pos, int &next);
 Array *getArray(string codeline, int pos, int &next);

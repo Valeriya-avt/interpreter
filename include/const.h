@@ -1,12 +1,7 @@
-//#ifndef CONST_H
-//#define CONST_H
-
 #include <string>
 #include <map>
 #include <iostream>
 #include <stack>
-
-//#include "lexem.h"
 
 enum LEX_TYPE {
 	NUMBER,
@@ -34,7 +29,7 @@ enum OPERATOR {
 	PLUS, MINUS,
 	MULT, DIV, MOD,
 	PRINT, RETURN,
-	FUNCTION, RET
+	FUNCTION
 };
 
 extern int PRIORITY[];
@@ -44,5 +39,3 @@ extern std::map<std::string, int> labelsMap;
 extern std::map<std::string, int> functionsMap;
 extern std::stack<int> returnAddresses;
 extern std::stack<int> returnIndex;
-
-//#endif
