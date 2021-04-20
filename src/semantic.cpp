@@ -6,6 +6,7 @@
 
 #include "lexem.h"
 #include "variables.h"
+#include "print.h"
 
 Lexem *checkForEvaluate(vector<Lexem *> &poliz, stack<Lexem *> &computationStack) {
 	Lexem *tmp = nullptr;
@@ -40,22 +41,6 @@ int inMap(string name, map<std::string, Array *> lexemsMap) {
 		return 0;
 	else
 		return 1;
-}
-
-void print(vector<Lexem *> &poliz, int index) {
-	if (poliz[index - 1]->getLexType() == VARIABLE)
-		cout << poliz[index - 1]->getName() << " = " << locals.top().variablesMap[poliz[index - 1]->getName()] << endl;
-	else if (poliz[0]->getLexType() == ARRAY_ELEMENT) {
-		int pos;
-		if (poliz[index - 2]->getLexType() == VARIABLE)
-			pos = locals.top().variablesMap[poliz[index - 2]->getName()];
-		else
-			pos = poliz[index - 2]->getValue(); 
-		cout << poliz[index - 3]->getName() << "[" << pos << "]" << " = " << locals.top().arraysMap[poliz[index - 3]->getName()]->getValue(pos)->getValue() << endl;
-		
-		//int pos = locals.top().computationStack.top()->getValue();
-		//cout << "PRINT " << poliz[0]->getName() << "[" << pos << "]" << " = " << locals.top().arraysMap[poliz[0]->getName()]->getValue(pos)->getValue() << " ";
-	}
 }
 
 int evaluatePostfix(vector<Lexem *> &poliz, int row, int *index) {
@@ -156,16 +141,6 @@ int evaluatePostfix(vector<Lexem *> &poliz, int row, int *index) {
 				continue;
 			}
 			if (poliz[i]->getType() == PRINT) {
-				// if (poliz[i - 1]->getLexType() == VARIABLE)
-				// 	cout << "PRINT " << locals.top().variablesMap[poliz[i - 1]->getName()] << " ";
-				// else if (poliz[i - 3]->getLexType() == ARRAY_ELEMENT) {
-				// 	int index;
-				// 	if (poliz[i - 2]->getLexType() == VARIABLE)
-				// 		index = locals.top().variablesMap[poliz[i - 2]->getName()];
-				// 	else
-				// 		index = poliz[i - 2]->getValue(); 
-				// 	cout << "PRINT " << locals.top().arraysMap[poliz[i - 3]->getName()]->getValue(index)->getValue() << " ";
-				// }
 				print(poliz, i);
 				continue;
 			}
