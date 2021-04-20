@@ -1,0 +1,19 @@
+function main
+    digit_one := 1
+    digit_zero := 0
+    i := 0
+    j := 0
+    n := 5
+    while i < n then
+        while j < n then
+            if i == j then
+                print digit_one
+            else
+                print digit_zero
+            endif
+            j := j + 1
+        endwhile
+        j := 0
+        i := i + 1
+    endwhile
+    return

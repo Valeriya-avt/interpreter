@@ -1,0 +1,10 @@
+function main
+    a := 10
+    b := 2
+    if a > 20 then
+        a := a / b
+    else
+        a := a * b
+    endif
+    a := 7
+    return

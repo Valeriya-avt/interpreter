@@ -1,8 +1,0 @@
-function A(x, b)
-y := x * 2
-endfunction y
-
-function main
-z := 4
-z := A(7, 9) + 5
-ret

@@ -1,0 +1,9 @@
+function A(x)
+    y := x * 2
+    return y
+
+function main()
+    z := 4
+    z := A(z) + 5
+    return
+

@@ -1,0 +1,14 @@
+function A()
+    x := 5
+    return
+
+function B()
+    A()
+    x := 7
+    return
+
+function main()
+    x := 1
+    y := 3
+    B()
+    return
