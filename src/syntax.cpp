@@ -48,7 +48,6 @@ vector<Lexem *> buildPostfix(const vector<Lexem *> &infix) {
 					}
 				}
 				if (infix[i]->getType() == RBRACKET && !functionsStack.empty()) {
-					cout << "I IN IFELSE " << functionsStack.top()->getName() << endl;
 					postfix.push_back(functionsStack.top());
 					functionsStack.pop();
 				}

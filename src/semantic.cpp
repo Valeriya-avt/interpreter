@@ -66,6 +66,9 @@ int evaluatePostfix(vector<Lexem *> &poliz, int row, int *index) {
 							space.variablesMap[poliz[j]->getName()] = prevLocals.top().computationStack.top()->getValue();
 						if (prevLocals.top().computationStack.top()->getLexType() == VARIABLE)
 							space.variablesMap[poliz[j]->getName()] = prevLocals.top().variablesMap[prevLocals.top().computationStack.top()->getName()];
+						// if (prevLocals.top().computationStack.top()->getLexType() == ARRAY_ELEMENT) {
+						// 	space.variablesMap[poliz[j]->getName()] = prevLocals.top().arraysMap[prevLocals.top().computationStack.top()->getName()]->getValue(right->getIndex())->getValue();
+						// }
 						prevLocals.top().computationStack.pop();
 					}
 					locals.push(space);
@@ -94,6 +97,12 @@ int evaluatePostfix(vector<Lexem *> &poliz, int row, int *index) {
 					}
 					if (locals.top().computationStack.top()->getLexType() == NUMBER) {
 						prevLocals.top().computationStack.push(locals.top().computationStack.top());
+					}
+					if (locals.top().computationStack.top()->getLexType() == ARRAY_ELEMENT) {
+						int value = locals.top().arraysMap[locals.top().computationStack.top()->getName()]->getValue(locals.top().computationStack.top()->getIndex())->getValue();
+						Number *num = new Number(value);
+						recycle.push_back(num);
+						prevLocals.top().computationStack.push(num);
 					}
 				}
 				locals.pop();

@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
 		cout << "\n\n";   
 	} 
 
-	initJumps(infixLines);
+	initJumps(infixLines);                
 
 	for (const auto &infix: infixLines) {
 		postfixLines.push_back(buildPostfix(infix));
