@@ -16,7 +16,7 @@ bool isGoTo(OPERATOR numOfOper) {
 	return  numOfOper == GOTO || numOfOper == IF ||
 			numOfOper == ELSE || numOfOper == WHILE ||
 			numOfOper == ENDWHILE || numOfOper == FUNCTION ||
-			numOfOper == ENDFUNCTION; //
+			numOfOper == RETURN; //
 }
 
 Oper *getOper(string codeline, int pos, int &next, int inParse) {

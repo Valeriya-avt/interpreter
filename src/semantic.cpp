@@ -85,7 +85,9 @@ int evaluatePostfix(vector<Lexem *> &poliz, int row, int *index) {
 		}
 		if (poliz[i]->getLexType() == OPER) {
 			Oper *lexemop = (Oper *)poliz[i];
-			if (lexemop->getType() == ENDFUNCTION) {
+			if (lexemop->getType() == RETURN) {
+				if (returnAddresses.empty())
+					return row + 1;
 				int rowNumber = returnAddresses.top();
 				returnAddresses.pop();
 				if (i != 0) {

@@ -42,8 +42,8 @@ std::string OPERTEXT[] = {
 	"<=", "<", ">=", ">",
 	"+", "-",
 	"*", "/", "%",
-	"print", "ret",
-	"function", "endfunction"
+	"print", "return",
+	"function", "ret"
 };
 
 int OP_NUM = sizeof(OPERTEXT) / sizeof(std::string);

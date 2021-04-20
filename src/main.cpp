@@ -43,7 +43,7 @@ int main(int argc, char **argv) {
 			if (postfixLines[row][j])
 				postfixLines[row][j]->print();     
 		}
-		cout << "\n\n";   
+		cout << "\n\n";       
 	}
 	row = 0;
 	while (0 <= row && row < postfixLines.size()) {
