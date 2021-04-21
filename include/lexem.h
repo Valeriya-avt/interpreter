@@ -67,35 +67,29 @@ public:
 	int inFunctionsMap();
 };
 
-class ArrayElement;
-
 class Array: public Lexem {
-	vector <ArrayElement *> data;
+	vector <int> data;
 	int size;
 	string name;
 public:
 	Array();
 	Array(string _name);
-	ArrayElement *getValue(int index);
+	int getValue(int index);
+	void setValue(int index, int value = 0);
 	void createArray(int _size);
 	string getName();
 	void print();
 	void printArray();
-	virtual ~Array();
 };
 
-class ArrayElement: public Array {
-	int data;
+class ArrayElement: public Lexem {
 	int index;
 	string name;
 public:
-	ArrayElement(string name, int _index = 0, int value = 0);
-	int getValue();
+	ArrayElement(string _name, int _index = 0);
 	int getIndex();
-	void setValue(int value);
 	string getName();
 	void print();
-	~ArrayElement();
 };
 
 struct Space {
