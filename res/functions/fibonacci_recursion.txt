@@ -1,0 +1,11 @@
+function fibonacci(n)
+    if n < 2 then
+        return n
+    endif
+    return fibonacci(n - 1) + fibonacci(n - 2)
+
+function main()
+    n := 10
+    answer := fibonacci(n)
+    print answer
+    return

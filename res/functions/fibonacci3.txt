@@ -1,0 +1,19 @@
+function fibonacci(n)
+    a size 100
+    a[0] := 0
+    a[1] := 1
+    i := 2
+    while i <= n then
+        a[i] := a[i - 1] + a[i - 2]
+        print a[i]
+        i := i + 1
+    endwhile
+    return a[n]
+
+function main()
+    b size 10
+    b[4] := 7
+    answer := fibonacci(b[4])
+    print b[4]
+    print answer
+    return
