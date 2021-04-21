@@ -79,7 +79,7 @@ bool checkSeparators(char ch) {
 	return ch == ' ' || ch == '\t' || ch == '\n' || ch == ',';
 }
 
-Array *getArray(string codeline, int pos, int &next) {
+Lexem *getArray(string codeline, int pos, int &next) {
 	string subcodestring;
 	int i, oldNext1 = next, oldNext2, n = codeline.size();
 	for (i = pos; checkVariable(codeline[i]) && i < n;) {

@@ -25,7 +25,7 @@ int main(int argc, char **argv) {
 		initLabels(infixLines[row], row);
 	printVector("Infix:\n", infixLines);
 
-	initJumps(infixLines);
+	initJumps(infixLines);  
 
 	for (const auto &infix: infixLines)
 		postfixLines.push_back(buildPostfix(infix));
@@ -34,17 +34,26 @@ int main(int argc, char **argv) {
 	locals.push(space);
 	row = functionsMap["main"];
 	int index = 0;
-	cout << "Result:\n";     
+	cout << "Result:\n";                 
 	while (0 <= row && row < postfixLines.size()) {
-		row = evaluatePostfix(postfixLines[row], row, &index);                               
+		// cout << row << ": ";
+		// for (int j = 0; j < postfixLines[row].size(); j++) {   
+		// 	if (postfixLines[row][j])
+		// 		postfixLines[row][j]->print();     
+		// }
+		// cout << endl;        
+		row = evaluatePostfix(postfixLines[row], row, &index);
+
 		// if (!locals.empty()) {
 		// 	printMap("Variables: ", locals.top().variablesMap);
-		// 	printMap("Labels: ", labelsMap);   
+		// 	printMap("Labels: ", labelsMap);                
 		// }
-	}
+	//printArraysMap(locals.top().arraysMap);  
+	} 
 	//printArraysMap(locals.top().arraysMap);
-	for (int i = 0; i < infixLines.size(); i++) 
-		deleteVector(infixLines[i]);  
+	for (int i = 0; i < infixLines.size(); i++) {
+		deleteVector(infixLines[i]);
+	}
 	deleteVector(recycle); 
 	file.close(); 
 	return 0;

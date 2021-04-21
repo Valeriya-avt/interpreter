@@ -18,9 +18,9 @@ Lexem *checkForEvaluate(vector<Lexem *> &poliz, stack<Lexem *> &computationStack
 		tmp = new Variable(computationStack.top()->getName());
 	} else if (!computationStack.empty() && computationStack.top() != nullptr && 
 		computationStack.top()->getLexType() == ARRAY_ELEMENT) {
-	 	tmp = new ArrayElement(computationStack.top()->getName(), computationStack.top()->getIndex(), computationStack.top()->getValue());
+	 	tmp = new ArrayElement(computationStack.top()->getName(), computationStack.top()->getIndex());
 	}
-	computationStack.pop(); 
+	computationStack.pop();  
 	return tmp;
 }
 
@@ -57,6 +57,9 @@ int evaluatePostfix(vector<Lexem *> &poliz, int row, int *index) {
 					Space space;
 					prevLocals.top().computationStack.pop();
 					for (j = i - 1; j >= 0; j--) {
+						if (prevLocals.top().computationStack.top()->getLexType() == ARRAY_ELEMENT) {
+						 	space.variablesMap[poliz[j]->getName()] = prevLocals.top().arraysMap[prevLocals.top().computationStack.top()->getName()]->getValue(poliz[i]->getIndex());
+						}
 						if (prevLocals.top().computationStack.top()->getLexType() == NUMBER)
 							space.variablesMap[poliz[j]->getName()] = prevLocals.top().computationStack.top()->getValue();
 						if (prevLocals.top().computationStack.top()->getLexType() == VARIABLE && 
@@ -97,7 +100,7 @@ int evaluatePostfix(vector<Lexem *> &poliz, int row, int *index) {
 						prevLocals.top().computationStack.push(locals.top().computationStack.top());
 					}
 					if (locals.top().computationStack.top()->getLexType() == ARRAY_ELEMENT) {
-						int value = locals.top().arraysMap[locals.top().computationStack.top()->getName()]->getValue(locals.top().computationStack.top()->getIndex())->getValue();
+						int value = locals.top().arraysMap[locals.top().computationStack.top()->getName()]->getValue(locals.top().computationStack.top()->getIndex());
 						Number *num = new Number(value);
 						recycle.push_back(num);
 						prevLocals.top().computationStack.push(num);
@@ -154,10 +157,13 @@ int evaluatePostfix(vector<Lexem *> &poliz, int row, int *index) {
 				string name = locals.top().computationStack.top()->getName();
 				locals.top().computationStack.pop();
 				if (poliz[i]->getType() == LVALUE) {
-					ArrayElement *element = locals.top().arraysMap[name]->getValue(index);
+					//int number = locals.top().arraysMap[name]->getValue(index);
+					//Number *num = new Number(number);
+					ArrayElement *element = new ArrayElement(name, index);
+					recycle.push_back(element);
 					locals.top().computationStack.push(element);
 				} else {
-					int number = locals.top().arraysMap[name]->getValue(index)->getValue();
+					int number = locals.top().arraysMap[name]->getValue(index);
 					Number *num = new Number(number);
 					recycle.push_back(num);
 					locals.top().computationStack.push(num);
@@ -173,7 +179,7 @@ int evaluatePostfix(vector<Lexem *> &poliz, int row, int *index) {
 				recycle.push_back(right);
 			}
 			if (right != nullptr && right->getLexType() == ARRAY_ELEMENT) {
-				right = new Number(locals.top().arraysMap[right->getName()]->getValue(right->getIndex())->getValue());
+				right = new Number(locals.top().arraysMap[right->getName()]->getValue(right->getIndex()));
 				recycle.push_back(right);
 			}
 
@@ -184,7 +190,7 @@ int evaluatePostfix(vector<Lexem *> &poliz, int row, int *index) {
 					recycle.push_back(num);
 					locals.top().computationStack.push(num);
 				} else if (left->getLexType() == ARRAY_ELEMENT) {
-					locals.top().arraysMap[left->getName()]->getValue(left->getIndex())->setValue(right->getValue());
+					locals.top().arraysMap[left->getName()]->setValue(left->getIndex(), right->getValue());
 					Number *num = new Number(right->getValue());
 					recycle.push_back(num);
 					locals.top().computationStack.push(num);
@@ -193,7 +199,7 @@ int evaluatePostfix(vector<Lexem *> &poliz, int row, int *index) {
 				left = new Number(locals.top().variablesMap[left->getName()]);
 				recycle.push_back(left);
 			} else if (left != nullptr && left->getLexType() == ARRAY_ELEMENT) {
-				left = new Number(locals.top().arraysMap[left->getName()]->getValue(left->getIndex())->getValue());
+				left = new Number(locals.top().arraysMap[left->getName()]->getValue(left->getIndex()));
 				//left = new Number(arraysMap[right->getName()]->getValue(right->getIndex())->getValue());
 				recycle.push_back(left);
 			}

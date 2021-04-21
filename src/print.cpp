@@ -43,6 +43,6 @@ void print(vector<Lexem *> &poliz, int index) {
 			pos = locals.top().variablesMap[poliz[index - 2]->getName()];
 		else
 			pos = poliz[index - 2]->getValue(); 
-		cout << poliz[index - 3]->getName() << "[" << pos << "]" << " = " << locals.top().arraysMap[poliz[index - 3]->getName()]->getValue(pos)->getValue() << endl;
+		cout << poliz[index - 3]->getName() << "[" << pos << "]" << " = " << locals.top().arraysMap[poliz[index - 3]->getName()]->getValue(pos) << endl;
 	}
 }

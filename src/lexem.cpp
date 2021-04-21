@@ -3,9 +3,6 @@
 #include "lexem.h"
 #include "variables.h"
 
-//#include "const.h"
-//using namespace std;
-
 Lexem::Lexem() { }
 int Lexem::getLexType() {return type;}
 void Lexem::setType(LEX_TYPE type) {Lexem::type = type;}
@@ -114,7 +111,7 @@ string Variable::getName() {return name;}
 
 int Variable::inLabelsMap() {
 	auto it = labelsMap.find(name);
-	if (it == labelsMap.end())
+	if (it == labelsMap.end())  
 		return 0;
 	else
 		return 1;
@@ -140,23 +137,14 @@ void Goto::print() {
 	cout << "[GOTO<row " << row << ">" << OPERTEXT[this->getType()] << "] ";
 }
 
-ArrayElement::ArrayElement(string _name, int _index, int _data) {
+ArrayElement::ArrayElement(string _name, int _index) {
 	name = _name;
 	index = _index;
-	data = _data;
-	this->setType(ARRAY_ELEMENT);
-}
-
-int ArrayElement::getValue() {
-	return data;
+	this->setType(ARRAY_ELEMENT);  
 }
 
 int ArrayElement::getIndex() {
 	return index;
-}
-
-void ArrayElement::setValue(int value) {
-	data = value;
 }
 
 void ArrayElement::print() {
@@ -168,30 +156,29 @@ Array::Array(string _name) {
 	this->setType(ARRAY);
 }
 
+void Array::setValue(int index, int value) {
+	data[index] = value;
+}
+
 Array::Array() {
 	this->setType(ARRAY);
 }
 
 void Array::createArray(int _size) {
 	size = _size;
-	//cout << "in createArray" << endl;
 	for (int i = 0; i < size; i++) {
-		//cout << "in createArray i = " << i << endl;
-		ArrayElement *element = new ArrayElement(name, i);
+		int element = 0;
 		data.push_back(element);
 	}
 }
 
-ArrayElement *Array::getValue(int _index) {
+int Array::getValue(int _index) {
 	return data[_index];
 }
 
 string ArrayElement::getName() {return name;}
-
+ 
 string Array::getName() {return name;}
-
-ArrayElement::~ArrayElement() {
-}
 
 void Array::print() {
 	cout << "[array " << name << " size " << size << "] ";
@@ -199,14 +186,6 @@ void Array::print() {
 
 void Array::printArray() {
 	for (int i = 0; i < size; i++) {
-		cout << name << "[" << i << "] = " << data[i]->getValue() << endl;
-	}
-}
-
-Array::~Array() {
-	for (int i = 0; i < size; i++) {
-		if (data[i] != nullptr) {
-			delete data[i];
-		}
+		cout << name << "[" << i << "] = " << data[i] << endl;
 	}
 }
