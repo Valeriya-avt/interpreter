@@ -51,9 +51,8 @@ int main(int argc, char **argv) {
 	//printArraysMap(locals.top().arraysMap);  
 	} 
 	//printArraysMap(locals.top().arraysMap);
-	for (int i = 0; i < infixLines.size(); i++) {
+	for (int i = 0; i < infixLines.size(); i++)
 		deleteVector(infixLines[i]);
-	}
 	deleteVector(recycle); 
 	file.close(); 
 	return 0;
