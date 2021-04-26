@@ -2,38 +2,41 @@ CXX           = g++
 DEL_FILE      = rm
 MKDIR         = mkdir
 DEL_DIR       = rmdir
-FLAGS	      = -c -I./include -fsanitize=address,leak
+FLAGS	      = -c -I./include -fpic -shared -fsanitize=address,leak
 
-all: bin bin/const.o bin/variables.o bin/lexem.o bin/lexical.o bin/syntax.o bin/semantic.o bin/print.o bin/main 
+all: lib lib/libconst.so bin lib/libvariables.so lib/liblexem.so lib/liblexical.so lib/libsyntax.so lib/libsemantic.so lib/libprint.so bin/main 
+
+lib:
+	$(MKDIR) lib
 
 bin:
 	$(MKDIR) bin
 
-bin/const.o: src/const.cpp
+lib/libconst.so: src/const.cpp
 	$(CXX) $? -o $@ $(FLAGS)
 
-bin/variables.o: src/variables.cpp
+lib/libvariables.so: src/variables.cpp
 	$(CXX) $? -o $@ $(FLAGS)
 
-bin/lexem.o: src/lexem.cpp
+lib/liblexem.so: src/lexem.cpp
 	$(CXX) $? -o $@ $(FLAGS)
 
-bin/lexical.o: src/lexical.cpp
+lib/liblexical.so: src/lexical.cpp
 	$(CXX) $? -o $@ $(FLAGS)
 
-bin/syntax.o: src/syntax.cpp
+lib/libsyntax.so: src/syntax.cpp
 	$(CXX) $? -o $@ $(FLAGS)
 
-bin/semantic.o: src/semantic.cpp
+lib/libsemantic.so: src/semantic.cpp
 	$(CXX) $? -o $@ $(FLAGS)
 
-bin/print.o: src/print.cpp
+lib/libprint.so: src/print.cpp
 	$(CXX) $? -o $@ $(FLAGS)
 
 bin/main: src/main.cpp
-	$(CXX) $? bin/const.o bin/variables.o bin/lexem.o bin/lexical.o bin/syntax.o bin/semantic.o bin/print.o -o $@ -I./include -fsanitize=address,leak
+	$(CXX) $? -I./include -L lib/ -lconst -lvariables -llexem -llexical -lsyntax -lsemantic -lprint -o $@ -fsanitize=address,leak
 
 clean:
-	$(DEL_FILE) bin/const.o bin/variables.o bin/lexem.o bin/lexical.o bin/syntax.o bin/semantic.o bin/print.o bin/main
+	$(DEL_FILE) lib/libconst.so lib/libvariables.so lib/liblexem.so lib/liblexical.so lib/libsyntax.so lib/libsemantic.so lib/libprint.so bin/main
+	$(DEL_DIR) lib
 	$(DEL_DIR) bin
-
