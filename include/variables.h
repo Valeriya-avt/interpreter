@@ -2,7 +2,7 @@
 #include <map>
 #include <iostream>
 
-#include "lexem.h"
+#include <lexem.h>
 
 extern bool BEFORE_ASSIGN, LVALUE_FOUND, IN_PARSE;
 extern Space globalVariables;

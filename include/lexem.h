@@ -1,7 +1,7 @@
 #ifndef LEXEM_H
 #define LEXEM_H
 
-#include "const.h"
+#include <const.h>
 #include <vector>
 #include <map>
 #include <string>
