@@ -3,8 +3,8 @@
 #include <string>
 #include <stack>
 
-#include "lexem.h"
-#include "variables.h"
+#include <lexem.h>
+#include <variables.h>
 
 bool checkVariable(char ch) {
 	return ((ch >= 'a' && ch <= 'z') ||

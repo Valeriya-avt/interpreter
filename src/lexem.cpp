@@ -1,7 +1,7 @@
 #include <iostream>
 
-#include "lexem.h"
-#include "variables.h"
+#include <lexem.h>
+#include <variables.h>
 
 Lexem::Lexem() { }
 int Lexem::getLexType() {return type;}

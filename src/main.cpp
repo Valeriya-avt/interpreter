@@ -5,12 +5,12 @@
 #include <map>
 #include <fstream>
 
-#include "lexem.h"
-#include "variables.h"
-#include "lexical.h"
-#include "syntax.h"
-#include "semantic.h"
-#include "print.h"
+#include <lexem.h>
+#include <variables.h>
+#include <lexical.h>
+#include <syntax.h>
+#include <semantic.h>
+#include <print.h>
 
 int main(int argc, char **argv) {
 	string codeline;

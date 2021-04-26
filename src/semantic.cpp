@@ -4,9 +4,9 @@
 #include <stack>
 #include <map>
 
-#include "lexem.h"
-#include "variables.h"
-#include "print.h"
+#include <lexem.h>
+#include <variables.h>
+#include <print.h>
 
 Lexem *checkForEvaluate(vector<Lexem *> &poliz, stack<Lexem *> &computationStack) {
 	Lexem *tmp = nullptr;

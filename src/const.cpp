@@ -1,7 +1,7 @@
 #include <string>
 #include <map>
 
-#include "const.h"
+#include <const.h>
 
 int PRIORITY[] = {
 	-1, -1,

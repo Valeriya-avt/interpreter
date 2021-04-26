@@ -4,8 +4,8 @@
 #include <stack>
 #include <map>
 
-#include "lexem.h"
-#include "variables.h"
+#include <lexem.h>
+#include <variables.h>
 
 bool checkBuild(int type, int prevPriority, int currentPriority) {
 	return (((type == ASSIGN) && prevPriority > currentPriority) || 
