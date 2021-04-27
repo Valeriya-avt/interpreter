@@ -1,0 +1,11 @@
+global x
+
+function f()
+    x := 4
+    return
+    
+function main()
+    x := 1
+    f()
+    x := 5
+    return
