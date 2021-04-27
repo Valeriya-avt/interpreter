@@ -267,4 +267,6 @@ bin/main res/functions/fibonacci_recursion.txt
 <p align="center">
 <img src="https://github.com/Valeriya-avt/interpreter/blob/main/image/functions_fibonacci_recursion.gif" width="80%"></p>
 
-You can optionally display a table of local variables for each function. 
+You can optionally display a table of local variables for each function.
+
+I’m very glad if you liked this interpreter. I look forward to your comments and ideas!
