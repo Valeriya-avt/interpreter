@@ -168,6 +168,10 @@ function main()
     endwhile
     return
 ```
+Enter into the command line: 
+```
+bin/main res/arrays/fibonacci.txt
+```
 
 <p align="center">
 <img src="https://github.com/Valeriya-avt/interpreter/blob/main/image/arrays_fibonacci.gif" width="80%"></p>
@@ -181,4 +185,86 @@ function main()
 <p align="center">
 <img src="https://github.com/Valeriya-avt/interpreter/blob/main/image/arrays_image_3.png" width="80%"></p>
 
+---
+Let's test the functions! Let's take the main calculations into a separate function that returns the desired Fibonacci number.
 
+```
+function fibonacci(n)
+    a size 100
+    a[0] := 0
+    a[1] := 1
+    i := 2
+    while i <= n then
+        a[i] := a[i - 1] + a[i - 2]
+        print a[i]
+        i := i + 1
+    endwhile
+    return a[n]
+
+function main()
+    n := 10
+    answer := fibonacci(n)
+    print answer
+    return
+```
+
+Enter into the command line: 
+```
+bin/main res/functions/fibonacci1.txt
+```
+
+<p align="center">
+<img src="https://github.com/Valeriya-avt/interpreter/blob/main/image/functions_fibonacci1.gif" width="80%"></p>
+---
+The function argument can even be an array!
+
+```
+function fibonacci(a, n)
+    a[0] := 0
+    a[1] := 1
+    i := 2
+    while i <= n then
+        a[i] := a[i - 1] + a[i - 2]
+        print a[i]
+        i := i + 1
+    endwhile
+    return
+
+function main()
+    a size 100
+    n := 10
+    fibonacci(a, n)
+    print a[n]
+    return
+```
+
+Enter into the command line: 
+```
+bin/main res/functions/fibonacci2.txt
+```
+<p align="center">
+<img src="https://github.com/Valeriya-avt/interpreter/blob/main/image/functions_fibonacci2.gif" width="80%"></p>
+---
+Think recursion is difficult and dangerous? Perhaps, but not with our interpreter and not with this task!
+
+```
+function fibonacci(n)
+    if n < 2 then
+        return n
+    endif
+    return fibonacci(n - 1) + fibonacci(n - 2)
+
+function main()
+    n := 10
+    answer := fibonacci(n)
+    print answer
+    return
+```
+Enter into the command line: 
+```
+bin/main res/functions/fibonacci_recursion.txt
+```
+<p align="center">
+<img src="https://github.com/Valeriya-avt/interpreter/blob/main/image/functions_fibonacci_recursion.gif" width="80%"></p>
+
+You can optionally display a table of local variables for each function. 
