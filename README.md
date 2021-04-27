@@ -182,10 +182,8 @@ bin/main res/arrays/fibonacci.txt
 <p align="center">
 <img src="https://github.com/Valeriya-avt/interpreter/blob/main/image/arrays_image_2.png" width="80%"></p>
 
-<p align="center">
-<img src="https://github.com/Valeriya-avt/interpreter/blob/main/image/arrays_image_3.png" width="80%"></p>
-
 ---
+
 Let's test the functions! Let's take the main calculations into a separate function that returns the desired Fibonacci number.
 
 ```
@@ -215,7 +213,9 @@ bin/main res/functions/fibonacci1.txt
 
 <p align="center">
 <img src="https://github.com/Valeriya-avt/interpreter/blob/main/image/functions_fibonacci1.gif" width="80%"></p>
+
 ---
+
 The function argument can even be an array!
 
 ```
@@ -244,7 +244,9 @@ bin/main res/functions/fibonacci2.txt
 ```
 <p align="center">
 <img src="https://github.com/Valeriya-avt/interpreter/blob/main/image/functions_fibonacci2.gif" width="80%"></p>
+
 ---
+
 Think recursion is difficult and dangerous? Perhaps, but not with our interpreter and not with this task!
 
 ```
