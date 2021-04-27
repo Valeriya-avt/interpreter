@@ -32,7 +32,7 @@ vector<Lexem *> buildPostfix(const vector<Lexem *> &infix) {
 			continue;
 		}
 		if (infix[i]->getLexType() == OPER) {
-			if (infix[i]->getType() == ENDIF || infix[i]->getType() == THEN)
+			if (infix[i]->getType() == ENDIF || infix[i]->getType() == THEN || infix[i]->getType() == GLOBAL)
 				continue;
 			if (infix[i]->getType() == LBRACKET) {
 				opstack.push((Oper *)infix[i]);

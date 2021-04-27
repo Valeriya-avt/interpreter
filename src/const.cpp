@@ -21,7 +21,7 @@ int PRIORITY[] = {
 	13, 14,
 	15, 15, 15,
 	16, 0,
-	0
+	0, 0
 };
 
 std::string OPERTEXT[] = {
@@ -42,7 +42,7 @@ std::string OPERTEXT[] = {
 	"+", "-",
 	"*", "/", "%",
 	"print", "return",
-	"function"
+	"function", "global"
 };
 
 int OP_NUM = sizeof(OPERTEXT) / sizeof(std::string);

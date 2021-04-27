@@ -207,3 +207,12 @@ void initJumps(vector<vector<Lexem *>> &infixes) {
 		}
 	}
 }
+
+void initGlobals(vector<vector<Lexem *>> &infixes) {
+	for (int row = 0; row < infixes.size(); row++) {
+		for (int i = 0; i < infixes[row].size(); i++) {
+			if (infixes[row][i] != nullptr && infixes[row][i]->getLexType() == OPER && infixes[row][i]->getType() == GLOBAL)
+				globals.variablesMap[infixes[row][i + 1]->getName()] = 0;
+		}
+	}
+}

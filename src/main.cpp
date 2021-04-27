@@ -25,7 +25,8 @@ int main(int argc, char **argv) {
 		initLabels(infixLines[row], row);
 	printVectors("Infix:\n", infixLines);
 
-	initJumps(infixLines);  
+	initJumps(infixLines);
+	initGlobals(infixLines);
 
 	for (const auto &infix: infixLines)
 		postfixLines.push_back(buildPostfix(infix));
@@ -36,14 +37,15 @@ int main(int argc, char **argv) {
 	int index = 0;
 	cout << "Result:\n";                 
 	while (0 <= row && row < postfixLines.size()) {
-		//cout << row << ": ";
-		//printVector(postfixLines[row]);   
+		// cout << row << ": ";
+		// printVector(postfixLines[row]);   
 		row = evaluatePostfix(postfixLines[row], row, &index);
 		// if (!locals.empty()) {
 		// 	printMap("Variables: ", locals.top().variablesMap);
 		// 	printMap("Labels: ", labelsMap);                
 		// }
-	//printArraysMap(locals.top().arraysMap);  
+		//printMap("Globals: ", globals.variablesMap);  
+		//printArraysMap(locals.top().arraysMap);  
 	} 
 	//printArraysMap(locals.top().arraysMap);
 	for (int i = 0; i < infixLines.size(); i++)

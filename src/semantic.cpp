@@ -35,9 +35,17 @@ void clearStack(stack <Lexem *> &stackOfLexemes) {
 		stackOfLexemes.pop();
 }
 
-int inMap(string name, map<std::string, Array *> lexemsMap) {
+int inArraysMap(string name, map<std::string, Array *> lexemsMap) {
 	auto it = lexemsMap.find(name);
 	if (it == lexemsMap.end())
+		return 0;
+	else
+		return 1;
+}
+
+int inGlobalVariables(string name) {
+	auto it = globals.variablesMap.find(name);
+	if (it == globals.variablesMap.end())
 		return 0;
 	else
 		return 1;
@@ -52,17 +60,21 @@ void takeArguments(vector<Lexem *> &poliz, Space &space, stack<Lexem *> &computa
 			space.variablesMap[poliz[j]->getName()] = prevLocals.top().arraysMap[name]->getValue(index);
 		if (type == NUMBER)
 			space.variablesMap[poliz[j]->getName()] = computationStack.top()->getValue();
-		if (type == VARIABLE && !inMap(name, prevLocals.top().arraysMap))
+		if (type == VARIABLE && !inArraysMap(name, prevLocals.top().arraysMap))
 			space.variablesMap[poliz[j]->getName()] = prevLocals.top().variablesMap[name];
-		else if (inMap(name, prevLocals.top().arraysMap))
+		else if (inArraysMap(name, prevLocals.top().arraysMap))
 			space.arraysMap[poliz[j]->getName()] = prevLocals.top().arraysMap[name];
 		computationStack.pop();
 	}
 }
 
 void returnValue(stack<Lexem *> &computationStack) {
+	int value;
 	if (computationStack.top()->getLexType() == VARIABLE) {
-		int value = locals.top().variablesMap[computationStack.top()->getName()];
+		if (!inGlobalVariables(computationStack.top()->getName()))
+			value = locals.top().variablesMap[computationStack.top()->getName()];
+		else
+			value = globals.variablesMap[computationStack.top()->getName()];
 		Number *num = new Number(value);
 		recycle.push_back(num);
 		prevLocals.top().computationStack.push(num);
@@ -81,8 +93,12 @@ void returnValue(stack<Lexem *> &computationStack) {
 
 void addArrayElement(Lexem *lexem, stack<Lexem *> &computationStack) {
 	int index;
-	if (computationStack.top()->getLexType() == VARIABLE)
-		index = locals.top().variablesMap[computationStack.top()->getName()];
+	if (computationStack.top()->getLexType() == VARIABLE) {
+		if (!inGlobalVariables(computationStack.top()->getName()))
+			index = locals.top().variablesMap[computationStack.top()->getName()];
+		else
+			index = globals.variablesMap[computationStack.top()->getName()];
+	}
 	else
 		index = computationStack.top()->getValue();
 	computationStack.pop();
@@ -102,7 +118,10 @@ void addArrayElement(Lexem *lexem, stack<Lexem *> &computationStack) {
 
 void processAssign(Lexem *left, Lexem *right) {
 	if (left->getLexType() == VARIABLE) {
-		locals.top().variablesMap[left->getName()] = right->getValue();
+		if (!inGlobalVariables(left->getName()))
+			locals.top().variablesMap[left->getName()] = right->getValue();
+		else
+			globals.variablesMap[left->getName()] = right->getValue();
 		Number *num = new Number(right->getValue());
 		recycle.push_back(num);
 		locals.top().computationStack.push(num);
@@ -116,7 +135,10 @@ void processAssign(Lexem *left, Lexem *right) {
 
 void evaluateExpression(Lexem *lexem, Lexem *left, Lexem *right) {
 	if (left != nullptr && left->getLexType() == VARIABLE) {
-		left = new Number(locals.top().variablesMap[left->getName()]);
+		if (!inGlobalVariables(left->getName()))
+			left = new Number(locals.top().variablesMap[left->getName()]);
+		else
+			left = new Number(globals.variablesMap[left->getName()]);
 		recycle.push_back(left);
 	} else if (left != nullptr && left->getLexType() == ARRAY_ELEMENT) {
 		left = new Number(locals.top().arraysMap[left->getName()]->getValue(left->getIndex()));
@@ -222,7 +244,10 @@ int evaluatePostfix(vector<Lexem *> &poliz, int row, int *index) {
 			recycle.push_back(right);
 			recycle.push_back(left);
 			if (right != nullptr && right->getLexType() == VARIABLE) {
-				right = new Number(locals.top().variablesMap[right->getName()]);
+				if (!inGlobalVariables(right->getName()))
+					right = new Number(locals.top().variablesMap[right->getName()]);
+				else
+					right = new Number(globals.variablesMap[right->getName()]);
 				recycle.push_back(right);
 			}
 			if (right != nullptr && right->getLexType() == ARRAY_ELEMENT) {
