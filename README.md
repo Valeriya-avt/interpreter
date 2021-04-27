@@ -143,11 +143,42 @@ function main()
 ```
 
 Let's try to check the work of our interpreter on this program. To do this, enter into the command line: 
-```bin/main res/if_while/fibonacci.txt```
+```
+bin/main res/if_while/fibonacci.txt
+```
 For convenience, infix and postfix entries will be displayed on the screen. 
 
 <p align="center">
 <img src="https://github.com/Valeriya-avt/interpreter/blob/main/image/if_while_fibonacci.gif" width="80%"></p>
 
 The problem of calculating Fibonacci numbers sounds pretty interesting, right? Let's try to solve this problem in several ways. We saw the first method, it works great! 
+
+Now let's save the results of calculating the Fibonacci numbers into an array:
+```
+function main()
+    f size 15
+    n := 10
+    f[0] := 0
+    f[1] := 1
+    i := 2
+    while i <= n then
+        f[i] := f[i - 1] + f[i - 2]
+        print f[i]
+        i := i + 1
+    endwhile
+    return
+```
+
+<p align="center">
+<img src="https://github.com/Valeriya-avt/interpreter/blob/main/image/arrays_fibonacci.gif" width="80%"></p>
+
+<p align="center">
+<img src="https://github.com/Valeriya-avt/interpreter/blob/main/image/arrays_image_1.png" width="80%"></p>
+
+<p align="center">
+<img src="https://github.com/Valeriya-avt/interpreter/blob/main/image/arrays_image_2.png" width="80%"></p>
+
+<p align="center">
+<img src="https://github.com/Valeriya-avt/interpreter/blob/main/image/arrays_image_3.png" width="80%"></p>
+
 
