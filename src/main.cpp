@@ -23,27 +23,22 @@ int main(int argc, char **argv) {
 	}
 	for (row = 0; row < infixLines.size(); ++row)
 		initLabels(infixLines[row], row);
-	printVector("Infix:\n", infixLines);
+	printVectors("Infix:\n", infixLines);
 
 	initJumps(infixLines);  
 
 	for (const auto &infix: infixLines)
 		postfixLines.push_back(buildPostfix(infix));
-	printVector("Postfix:\n", postfixLines);
+	printVectors("Postfix:\n", postfixLines);
 	Space space;
 	locals.push(space);
 	row = functionsMap["main"];
 	int index = 0;
 	cout << "Result:\n";                 
 	while (0 <= row && row < postfixLines.size()) {
-		// cout << row << ": ";
-		// for (int j = 0; j < postfixLines[row].size(); j++) {   
-		// 	if (postfixLines[row][j])
-		// 		postfixLines[row][j]->print();     
-		// }
-		// cout << endl;        
+		//cout << row << ": ";
+		//printVector(postfixLines[row]);   
 		row = evaluatePostfix(postfixLines[row], row, &index);
-
 		// if (!locals.empty()) {
 		// 	printMap("Variables: ", locals.top().variablesMap);
 		// 	printMap("Labels: ", labelsMap);                

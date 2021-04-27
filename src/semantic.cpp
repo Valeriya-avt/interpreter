@@ -60,8 +60,6 @@ void takeArguments(vector<Lexem *> &poliz, Space &space, stack<Lexem *> &computa
 	}
 }
 
-
-
 void returnValue(stack<Lexem *> &computationStack) {
 	if (computationStack.top()->getLexType() == VARIABLE) {
 		int value = locals.top().variablesMap[computationStack.top()->getName()];
@@ -80,7 +78,6 @@ void returnValue(stack<Lexem *> &computationStack) {
 		prevLocals.top().computationStack.push(num);
 	}
 }
-
 
 void addArrayElement(Lexem *lexem, stack<Lexem *> &computationStack) {
 	int index;
@@ -117,7 +114,6 @@ void processAssign(Lexem *left, Lexem *right) {
 	}
 }
 
-
 void evaluateExpression(Lexem *lexem, Lexem *left, Lexem *right) {
 	if (left != nullptr && left->getLexType() == VARIABLE) {
 		left = new Number(locals.top().variablesMap[left->getName()]);
@@ -134,7 +130,6 @@ void evaluateExpression(Lexem *lexem, Lexem *left, Lexem *right) {
 	}
 }
 
-
 void createArray() {
 	int size = locals.top().computationStack.top()->getValue();
 	locals.top().computationStack.pop();
@@ -143,7 +138,6 @@ void createArray() {
 	locals.top().arraysMap[name] = (Array *)locals.top().computationStack.top();
 	locals.top().computationStack.pop();
 }
-
 
 int evaluatePostfix(vector<Lexem *> &poliz, int row, int *index) {
 	int i, j;

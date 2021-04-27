@@ -21,15 +21,19 @@ void printArraysMap(map<string, Array *> lexemesMap) {
 	cout << endl;
 }
 
-void printVector(string vectorName, vector<vector<Lexem *>> lexemes) {
+void printVector(vector<Lexem *> lexemes) {
+	for (int i = 0; i < lexemes.size(); i++) {   
+		if (lexemes[i])
+			lexemes[i]->print();     
+	}
+	cout << endl;            
+}
+
+void printVectors(string vectorName, vector<vector<Lexem *>> lexemes) {
 	cout << vectorName;
 	for (int row = 0; row < lexemes.size(); ++row) {
-		cout << row << ": ";
-		for (int j = 0; j < lexemes[row].size(); j++) {   
-			if (lexemes[row][j])
-				lexemes[row][j]->print();     
-		}
-		cout << endl;            
+		cout << row + 1 << ": ";
+		printVector(lexemes[row]);
 	}
 	cout << "\n\n";
 }
