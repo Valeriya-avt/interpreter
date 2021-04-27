@@ -8,3 +8,4 @@ bool checkSeparators(char ch);
 bool isGoTo(OPERATOR numOfOper);
 void initLabels(vector<Lexem *> &infix, int row);
 void initJumps(vector<vector<Lexem *>> &infixes);
+void initGlobals(vector<vector<Lexem *>> &infixes);
