@@ -10,7 +10,15 @@
 <br clear = "left">
 
 ---
-
+To download, enter in the command line: 
+```
+git clone https://github.com/Valeriya-avt/interpreter
+```
+To compile, enter: 
+```
+make
+```
+---
 ### This interpreter can:
  * Read code from file;
  * Divide the code into tokens by creating an infix notation;
@@ -79,10 +87,10 @@ Let's take a look at some of the main points.
 4. Start executing the code from the `main` function;
 5. The basic calculations are performed in the `evaluatePostfix` function.
 
-
+---
 Let's give an example of interpreting infix notation into postfix notation.
 
->**Some code:** 
+**Some code:** 
 
 ```
 function main()
@@ -100,7 +108,7 @@ function main()
     return
 
 ```
->**Infix:**
+**Infix:**
 ```
 1: [GOTO<row -2147483647>function] [main] [ ( ] [ ) ] 
 2: [n] [:=] [10] 
@@ -117,7 +125,7 @@ function main()
 13: [GOTO<row -2147483647>return] 
 ```
 
->**Postfix:**
+**Postfix:**
 ```
 1: [main] [GOTO<row 1>function] 
 2: [n] [10] [:=] 
@@ -135,10 +143,11 @@ function main()
 ```
 
 Let's try to check the work of our interpreter on this program. To do this, enter into the command line: 
-`bin/main res/if_while/fibonacci.txt`
+```bin/main res/if_while/fibonacci.txt```
 For convenience, infix and postfix entries will be displayed on the screen. 
 
-gif
+<p align="center">
+<img src="https://github.com/Valeriya-avt/interpreter/blob/main/image/if_while_fibonacci.gif" width="80%"></p>
 
 The problem of calculating Fibonacci numbers sounds pretty interesting, right? Let's try to solve this problem in several ways. We saw the first method, it works great! 
 
