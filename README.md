@@ -168,7 +168,7 @@ function main()
     endwhile
     return
 ```
-Enter into the command line: 
+
 ```
 bin/main res/arrays/fibonacci.txt
 ```
@@ -206,7 +206,6 @@ function main()
     return
 ```
 
-Enter into the command line: 
 ```
 bin/main res/functions/fibonacci1.txt
 ```
@@ -238,7 +237,6 @@ function main()
     return
 ```
 
-Enter into the command line: 
 ```
 bin/main res/functions/fibonacci2.txt
 ```
@@ -262,7 +260,7 @@ function main()
     print answer
     return
 ```
-Enter into the command line: 
+
 ```
 bin/main res/functions/fibonacci_recursion.txt
 ```
