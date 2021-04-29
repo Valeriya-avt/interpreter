@@ -18,6 +18,15 @@ To compile, enter:
 ```
 make
 ```
+You can run the program as follows: 
+
+```
+bin/main path\_to_file 
+```
+You can also use the `-detail` flag to see more detailed work of the interpreter:
+```
+bin/main path\to_file -detail
+```
 ---
 ### This interpreter can:
  * Read code from file;
@@ -266,7 +275,5 @@ bin/main res/functions/fibonacci_recursion.txt
 ```
 <p align="center">
 <img src="https://github.com/Valeriya-avt/interpreter/blob/main/image/functions_fibonacci_recursion.gif" width="80%"></p>
-
-You can optionally display a table of local variables for each function.
 
 I’m very glad if you liked this interpreter. I look forward to your comments and ideas!
