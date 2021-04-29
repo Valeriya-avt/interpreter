@@ -38,7 +38,7 @@ void printVectors(string vectorName, vector<vector<Lexem *>> lexemes) {
 	cout << "\n\n";
 }
 
-void print(vector<Lexem *> &poliz, int index) {
+void print(const vector<Lexem *> &poliz, int index) {
 	if (poliz[index - 1]->getLexType() == VARIABLE)
 		cout << poliz[index - 1]->getName() << " = " << locals.top().variablesMap[poliz[index - 1]->getName()] << endl;
 	else if (poliz[0]->getLexType() == ARRAY_ELEMENT) {

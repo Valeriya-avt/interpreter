@@ -185,7 +185,6 @@ void Array::print() {
 }
 
 void Array::printArray() {
-	for (int i = 0; i < size; i++) {
+	for (int i = 0; i < size; i++)
 		cout << name << "[" << i << "] = " << data[i] << endl;
-	}
 }

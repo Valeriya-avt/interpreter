@@ -3,6 +3,8 @@
 
 #include <const.h>
 
+using std::string;
+
 int PRIORITY[] = {
 	-1, -1,
 	0,
@@ -44,6 +46,14 @@ std::string OPERTEXT[] = {
 	"print", "return",
 	"function", "global"
 };
+
+const string MAIN = "main";
+const string DETAIL = "-detail";
+const string VARIABLES = "Variables: ";
+const string INFIX = "Infix:\n";
+const string POSTFIX = "Postfix:\n";
+const string LABELS = "Labels: ";
+const string GLOBALS = "Globals:";
 
 int OP_NUM = sizeof(OPERTEXT) / sizeof(std::string);
 

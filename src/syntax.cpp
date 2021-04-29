@@ -19,12 +19,43 @@ void joinGotoAndLabel(Variable *lexemvar, stack<Oper *> &opstack) {
 	}
 }
 
+bool processOper(Lexem *lexem, vector<Lexem *> &postfix, stack<Oper *> &opstack, 
+                 stack<Variable *> &functionsStack) {
+	if (lexem->getType() == ENDIF || lexem->getType() == THEN || lexem->getType() == GLOBAL)
+		return false;
+	if (lexem->getType() == LBRACKET) {
+		opstack.push((Oper *)lexem);
+	} else if (lexem->getType() == RBRACKET || lexem->getType() == RSQUARE) {
+		while (!opstack.empty() && opstack.top()->getType() != LBRACKET) {
+			int type = opstack.top()->getType();
+			postfix.push_back(opstack.top());
+			opstack.pop();
+			if (type == LVALUE || type == RVALUE)
+				break;
+		}
+		if (lexem->getType() == RBRACKET && !functionsStack.empty()) {
+			postfix.push_back(functionsStack.top());
+			functionsStack.pop();
+		}
+		if (!opstack.empty() && opstack.top()->getType() == LBRACKET)
+			opstack.pop();
+	} else {
+		while (!opstack.empty() && checkBuild(lexem->getType(), 
+			    opstack.top()->getPriority(), lexem->getPriority())) {
+			int type = opstack.top()->getType();
+			postfix.push_back(opstack.top());
+			opstack.pop();
+		}
+		opstack.push((Oper *)lexem);
+	}
+	return true;
+}
+
 vector<Lexem *> buildPostfix(const vector<Lexem *> &infix) {
-	int i, j;
 	stack<Oper *> opstack;
 	stack<Variable *> functionsStack;
 	vector<Lexem *> postfix;
-	for (i = 0; i < infix.size(); i++) {
+	for (int i = 0; i < infix.size(); i++) {
 		if (infix[i] == nullptr)
 			continue;
 		if (infix[i]->getLexType() == NUMBER || infix[i]->getLexType() == ARRAY || infix[i]->getLexType() == ARRAY_ELEMENT) {
@@ -32,33 +63,8 @@ vector<Lexem *> buildPostfix(const vector<Lexem *> &infix) {
 			continue;
 		}
 		if (infix[i]->getLexType() == OPER) {
-			if (infix[i]->getType() == ENDIF || infix[i]->getType() == THEN || infix[i]->getType() == GLOBAL)
+			if (!processOper(infix[i], postfix, opstack, functionsStack))
 				continue;
-			if (infix[i]->getType() == LBRACKET) {
-				opstack.push((Oper *)infix[i]);
-			} else if (infix[i]->getType() == RBRACKET || infix[i]->getType() == RSQUARE) {
-				for (j = opstack.size(); j > 0 && !opstack.empty() && opstack.top()->getType() != LBRACKET; j--) {
-					int type = opstack.top()->getType();
-					postfix.push_back(opstack.top());
-					opstack.pop();
-					if (type == LVALUE || type == RVALUE)
-						break;
-				}
-				if (infix[i]->getType() == RBRACKET && !functionsStack.empty()) {
-					postfix.push_back(functionsStack.top());
-					functionsStack.pop();
-				}
-				if (!opstack.empty() && opstack.top()->getType() == LBRACKET)
-					opstack.pop();
-			} else {
-				while (!opstack.empty() && checkBuild(infix[i]->getType(), 
-					    opstack.top()->getPriority(), infix[i]->getPriority())) {
-					int type = opstack.top()->getType();
-					postfix.push_back(opstack.top());
-					opstack.pop();
-				}
-				opstack.push((Oper *)infix[i]);
-			}
 		}
 		if (infix[i]->getLexType() == VARIABLE) {
 			if (infix[i]->inLabelsMap())
@@ -69,7 +75,7 @@ vector<Lexem *> buildPostfix(const vector<Lexem *> &infix) {
 				functionsStack.push((Variable *)infix[i]);
 		}
 	}
-	for (i = opstack.size(); i > 0; i--) {
+	for (int i = opstack.size(); i > 0; i--) {
 		postfix.push_back(opstack.top());
 		opstack.pop();
 	}

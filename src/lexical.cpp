@@ -48,10 +48,8 @@ Oper *getOper(string codeline, int pos, int &next, bool inParse) {
 Number *getNumber(string codeline, int pos, int &next) {
 	int i, number = 0;
 	int n = codeline.size();
-	for (i = pos; i < n && (codeline[i] >= '0' && codeline[i] <= '9');) {
+	for (i = pos; i < n && (codeline[i] >= '0' && codeline[i] <= '9'); i++)
 		number = number * 10 + codeline[i] - '0';
-		i++;
-	}
 	if (i != pos) {
 		next = i;
 		return new Number(number);
@@ -90,9 +88,8 @@ Lexem *getArray(string codeline, int pos, int &next) {
 		next = i;
 		oldNext2 = next;
 		pos = next;
-		if (checkSeparators(codeline[pos])) {
+		if (checkSeparators(codeline[pos]))
 			pos++;
-		}
 		Lexem *lexem = getOper(codeline, pos, next, !IN_PARSE);
 		pos = next;
 		if ((lexem != nullptr) && (lexem->getType() == SIZE)) {
@@ -117,8 +114,7 @@ vector<Lexem *> parseLexem(string codeline) {
 	vector<Lexem *> infix;
 	Lexem *lexem;
 	int pos, next = 0;
-	BEFORE_ASSIGN = true;
-	LVALUE_FOUND = false;
+	BEFORE_ASSIGN = true, LVALUE_FOUND = false;
 	for (pos = 0; pos < codeline.size();) {
 		if (checkSeparators(codeline[pos])) {
 			pos++;
@@ -131,11 +127,8 @@ vector<Lexem *> parseLexem(string codeline) {
 			continue;
 		}
 		lexem = getNumber(codeline, pos, next);
-		if (lexem != nullptr) {
+		if (lexem != nullptr)
 			infix.push_back(lexem);
-			pos = next;
-			continue;
-		}
 		lexem = getArray(codeline, pos, next);
 		if (lexem != nullptr) {
 			infix.push_back(lexem);
@@ -169,14 +162,12 @@ void initLabels(vector<Lexem *> &infix, int row) {
 }
 
 void initJumps(vector<vector<Lexem *>> &infixes) {
-	stack<Goto *> stackIfElse;
-	stack<Goto *> stackWhile;
+	stack<Goto *> stackIfElse, stackWhile;
 	for (int row = 0; row < infixes.size(); row++) {
 		for (int i = 0; i < infixes[row].size(); i++) {
 			if (infixes[row][i] != nullptr && infixes[row][i]->getLexType() == OPER) {
-				if (infixes[row][i]->getType() == IF) {
+				if (infixes[row][i]->getType() == IF)
 					stackIfElse.push((Goto *)infixes[row][i]);
-				}
 				if (infixes[row][i]->getType() == ELSE) {
 					stackIfElse.top()->setRow(row + 1);
 					stackIfElse.pop();
