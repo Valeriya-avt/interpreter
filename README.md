@@ -21,7 +21,7 @@ make
 You can run the program as follows: 
 
 ```
-bin/main path/_to_file 
+bin/main path_to_file 
 ```
 You can also use the `-detail` flag to see more detailed work of the interpreter:
 ```
