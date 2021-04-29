@@ -25,7 +25,7 @@ bin/main path\_to_file
 ```
 You can also use the `-detail` flag to see more detailed work of the interpreter:
 ```
-bin/main path\to_file -detail
+bin/main path\_to_file -detail
 ```
 ---
 ### This interpreter can:
