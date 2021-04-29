@@ -3,6 +3,8 @@
 #include <iostream>
 #include <stack>
 
+using std::string;
+
 enum LEX_TYPE {
 	NUMBER,
 	OPER,
@@ -31,6 +33,14 @@ enum OPERATOR {
 	PRINT, RETURN,
 	FUNCTION, GLOBAL
 };
+
+extern const string MAIN;
+extern const string DETAIL;
+extern const string VARIABLES;
+extern const string INFIX;
+extern const string POSTFIX;
+extern const string LABELS;
+extern const string GLOBALS;
 
 extern int PRIORITY[];
 extern std::string OPERTEXT[];
